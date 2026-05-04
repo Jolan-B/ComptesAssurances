@@ -1,0 +1,154 @@
+body {
+    margin: 0;
+
+    /* COULEURS */
+
+    --color_gold: #CA9C00;
+    --color_gold_hover: rgb(136, 104, 0);
+
+    --color_grey: #b4b4b4;
+    --color_grey_hover: #a6a6a6;
+
+    /* TRANSITIONS */
+
+    --transition_fast: 0.3s;
+
+    /* TAILLE */
+
+    --nav_bar_width: 60px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+/* COMPONENTS */
+
+/* Add Button */
+
+.add_button {
+    width: fit-content;
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 12px;
+
+    align-self: center;
+    text-align: center;
+    font-weight: bold;
+
+    background-color: var(--color_gold);
+}
+
+.add_button:hover {
+    background-color: var(--color_gold_hover);
+    transition: var(--transition_fast);
+}
+
+/* Navigation Bar */
+
+.navigation_bar {
+    height: var(--nav_bar_width);
+    background-color: var(--color_grey);
+    font-weight: bold;
+    width: 100%;
+}
+
+.menu_buttons {
+    width: calc(100% - var(--nav_bar_width));
+
+    height: 100%;
+
+    display: flex;
+    justify-content: space-around;
+}
+
+.menu_button {
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    font-size: 1.2em;
+
+    padding: 0 20px;
+}
+
+.menu_button:hover {
+    background-color: var(--color_grey_hover);
+    transition: var(--transition_fast);
+}
+
+.profil_section {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.profil_photo {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+.profil_photo>img {
+    width: var(--nav_bar_width);
+    object-fit: contain;
+}
+
+.profil_option {
+    font-size: 0;
+}
+
+.profil_section:hover {
+
+    .profil_option {
+        background-color: var(--color_grey);
+        padding: 10px;
+        font-size: 1em;
+    }
+
+    .profil_option>div {
+        margin-right: 0.3em;
+    }
+
+    .profil_option:hover {
+
+        background-color: var(--color_grey_hover);
+
+        div {
+            margin-right: 0;
+            margin-left: 0.3em;
+            transition: var(--transition_fast);
+        }
+
+        transition: var(--transition_fast);
+    }
+}
+
+/* COMPONENTS */
+
+/* VIEWS */
+
+/* Filter-Assurance */
+
+.filter {
+    display: flex;
+    flex-direction: column;
+
+    width: fit-content;
+    height: calc(100vh - var(--nav_bar_width));
+    padding: 0 10px;
+
+    background-color: var(--color_grey);
+}
+
+label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.submit_filter {
+    align-self: flex-end;
+}
+
+/* VIEWS */
