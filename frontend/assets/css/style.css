@@ -22,6 +22,12 @@ body {
     cursor: pointer;
 }
 
+.submit_button {
+    background-color: red;
+    border: none;
+    padding: 0;
+}
+
 /* COMPONENTS */
 
 /* Add Button */
@@ -149,6 +155,12 @@ label {
 
 .submit_filter {
     align-self: flex-end;
+}
+
+/* Login */
+
+.bloc_login {
+    background-color: var(--color_grey);
 }
 
 /* VIEWS */
