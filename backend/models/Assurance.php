@@ -1,6 +1,5 @@
 <?php
 
-
 # TABLE PROPOSE #
 
 
@@ -14,7 +13,7 @@ function add_propose($id_assurance, $id_categories)
     VALUES (:id_a, :id_c);";
         $req = $db->prepare($sql);
         $req->bindValue(":id_a", $id_assurance);
-        $req->bindValue("id_c", $id_category);
+        $req->bindValue(":id_c", $id_category);
         $req->execute();
     }
 }
@@ -38,40 +37,49 @@ function delete_propose($id_assurance)
 // Récupérer toutes les Assurances
 function get_all_assurances()
 {
+    $id_user = $_SESSION["id_user"] ?? null;
+
     $db = get_db();
 
-    $sql = "SELECT `id_assurance`, `name_assurance`, `image_assurance`, `is_favorite`
-    FROM `Assurance`
-    ORDER BY `is_favorite` ASC, `name_assurance` ASC";
-    $req = $db->query($sql);
+    $sql = "SELECT `id_assurance`, `name_assurance`, `image_assurance`, F.assurance_id IS NOT NULL AS is_favorite
+    FROM `Assurance` AS A
+    LEFT JOIN `Favorite` AS F ON F.assurance_id = A.id_assurance AND F.user_id = :id_u
+    ORDER BY F.assurance_id IS NOT NULL ASC, `name_assurance` ASC";
+    $req = $db->prepare($sql);
+    $req->bindValue(":id_u", $id_user);
+    $req->execute();
     return $req->fetchAll();
 }
 
 // Récupérer une Assurance
-function get_assurance($id)
+function get_assurance($id_assurance)
 {
+    $id_user = $_SESSION["id_user"] ?? null;
+
     $db = get_db();
 
-    $sql = "SELECT `id_assurance`, `name_assurance`, `url_assurance`,`username_assurance`,`password_assurance`,`code_courtage_assurance`,`commentary_assurance`,`image_assurance`, `is_favorite`, P.category_id
+    $sql = "SELECT `id_assurance`, `name_assurance`, `url_assurance`,`username_assurance`,`password_assurance`,`code_courtage_assurance`,`commentary_assurance`,`image_assurance`, F.assurance_id IS NOT NULL AS is_favorite, P.category_id
     FROM `Assurance` AS A
-    JOIN `Propose` AS P ON P.assurance_id = A.id_assurance
-    WHERE `id_assurance` = :id
+    LEFT JOIN `Propose` AS P ON P.assurance_id = A.id_assurance
+    LEFT JOIN `Favorite` AS F ON F.assurance_id = A.id_assurance AND F.user_id = :id_u
+    WHERE `id_assurance` = :id_a
     GROUP BY  `id_assurance`";
     $req = $db->prepare($sql);
-    $req->bindValue(":id", $id);
+    $req->bindValue(":id_a", $id_assurance);
+    $req->bindValue(":id_u", $id_user);
     $req->execute();
     return $req->fetch();
 }
 
 // Ajouter une Assurance
-function add_assurance($id, $name, $url, $username, $pwd, $commentary, $categories, $favorite, $code_courtage = null, $image = null)
+function add_assurance($name, $url, $username, $pwd, $commentary, $categories, $code_courtage = null, $image = null)
 {
     $db = get_db();
 
     $hash = openssl_encrypt($pwd, 'AES-256-CBC', VAULT_AES_KEY, 0, VAULT_AES_IV);
 
-    $sql = "INSERT INTO `Assurance` (`name_assurance`, `url_assurance`, `username_assurance`, `password_assurance`, `code_courtage_assurance`, `commentary_assurance`, `image_assurance`, `is_favorite`)
-    VALUES (:name, :url, :username, :pwd, :cc, :comm, :image, :favorite);";
+    $sql = "INSERT INTO `Assurance` (`name_assurance`, `url_assurance`, `username_assurance`, `password_assurance`, `code_courtage_assurance`, `commentary_assurance`, `image_assurance`)
+    VALUES (:name, :url, :username, :pwd, :cc, :comm, :image);";
     $req = $db->prepare($sql);
     $req->bindValue(":name", $name);
     $req->bindValue(":url", $url);
@@ -80,22 +88,24 @@ function add_assurance($id, $name, $url, $username, $pwd, $commentary, $categori
     $req->bindValue(":cc", $code_courtage);
     $req->bindValue(":comm", $commentary);
     $req->bindValue(":image", $image);
-    $req->bindValue(":favorite", $favorite);
     $req->execute();
+
+    // Récupère l'id de l'Assurance qui vient d'être créée pour l'ajouter dans la table Propose
+    $id = $db->lastInsertId();
 
     add_propose($id, $categories);
 
 }
 
 // Modifier une Assurance
-function edit_assurance($id, $name, $url, $username, $pwd, $commentary, $categories, $favorite, $code_courtage = null, $image = null)
+function edit_assurance($id, $name, $url, $username, $pwd, $commentary, $categories, $code_courtage = null, $image = null)
 {
     $db = get_db();
 
     $hash = openssl_encrypt($pwd, 'AES-256-CBC', VAULT_AES_KEY, 0, VAULT_AES_IV);
 
     $sql = "UPDATE `Assurance`
-    SET `name_assurance` = :name,`url_assurance` = :url, `username_assurance` = :username, `password_assurance` = :pwd, `code_courtage_assurance` = :cc, `commentary_assurance` = :comm, `image_assurance` = :image, `is_favorite` = :favorite
+    SET `name_assurance` = :name,`url_assurance` = :url, `username_assurance` = :username, `password_assurance` = :pwd, `code_courtage_assurance` = :cc, `commentary_assurance` = :comm, `image_assurance` = :image
     WHERE `id_assurance` = :id";
     $req = $db->prepare($sql);
     $req->bindValue(":id", $id);
@@ -106,7 +116,6 @@ function edit_assurance($id, $name, $url, $username, $pwd, $commentary, $categor
     $req->bindValue(":comm", $commentary);
     $req->bindValue(":cc", $code_courtage);
     $req->bindValue(":image", $image);
-    $req->bindValue(":favorite", $favorite);
     $req->execute();
 
     delete_propose($id);
@@ -126,31 +135,89 @@ WHERE `id_assurance` = :id";
 }
 
 // Mettre / enlever le favori d'une Assurance
-function change_favorite_assurance($id)
+function change_favorite_assurance($id_assurance)
 {
+    $id_user = $_SESSION["id_user"] ?? null;
+
     $db = get_db();
 
-    $sql = "UPDATE `Assurance`
-    SET `is_favorite` = NOT is_favorite
-    WHERE `id_assurance` = :id";
+    // On vérifie si l'Assurance est déjà dans les favoris de l'Utilisateur
+    $sql = "SELECT `user_id`
+    FROM `Favorite`
+    WHERE `user_id` = :id_u AND `assurance_id` = :id_a";
     $req = $db->prepare($sql);
-    $req->bindValue(":id", $id);
+    $req->bindValue(":id_u", $id_user);
+    $req->bindValue(":id_a", $id_assurance);
+    $req->execute();
+
+    $is_favorite = ($req->fetch() == $id_user);
+
+    // Si l'Assurance est déjà en favori, on la supprime de la table Favorite, sinon on l'ajoute
+    if ($is_favorite) {
+        $sql = "DELETE FROM `Favorite`
+        WHERE `user_id` = :id_u AND `assurance_id` = :id_a";
+    } else {
+        $sql = "INSERT INTO `Favorite` (`user_id`,`assurance_id`) 
+        VALUES (:id_u, :id_a)";
+    }
+
+    $req = $db->prepare($sql);
+    $req->bindValue(":id_u", $id_user);
+    $req->bindValue(":id_a", $id_assurance);
     $req->execute();
 }
 
-// Filtrer les Assurances
-function filter_assurance($name = "", $favorite = "1=1", $category = "1=1")
+// Sauvegarder le filtre en session
+function save_filter_assurance($name, $is_favorite, $categories)
 {
+    $_SESSION['filter_name'] = $name;
+    $_SESSION['filter_is_favorite'] = $is_favorite;
+    $_SESSION['filter_categories'] = $categories;
+}
+
+// Filtrer les Assurances
+function filter_assurance()
+{
+    $id_user = $_SESSION["id_user"] ?? null;
+    $name = $_SESSION['filter_name'] ?? null;
+    $favorite = $_SESSION['filter_favorite'] ?? null;
+    $categories = $_SESSION['filter_categories'] ?? null;
+
     $db = get_db();
-    $sql = "SELECT `id_assurance`, `name_assurance`, `image_assurance`, `is_favorite`
+    $sql = "SELECT `id_assurance`, `name_assurance`, `image_assurance`, F.assurance_id IS NOT NULL AS is_favorite
     FROM `Assurance` AS A
-    JOIN `Propose` AS P ON P.assurance_id=A.id_assurance
-    WHERE `name_assurance` LIKE :name AND `is_favorite` = :favorite AND P.category_id = :category
-    ORDER BY `is_favorite` ASC, `name_assurance` ASC";
+    LEFT JOIN `Propose` AS P ON P.assurance_id=A.id_assurance
+    LEFT JOIN `Favorite` AS F ON F.assurance_id=A.id_assurance AND F.user_id=:id_u
+    WHERE 1=1";
+
+    if ($name !== null && $name !== "") {
+        $sql .= " AND `name_assurance` LIKE :name";
+    }
+    if ($favorite !== null) {
+        $sql .= " AND `is_favorite` = :favorite";
+    }
+    if ($categories !== null) {
+        $sql .= " AND (";
+        foreach ($categories as $i => $category) {
+            $sql .= ($i === 0 ? "" : " OR") . " P.category_id = :category_$i";
+        }
+        $sql .= ")";
+    }
+
+    $sql .= " ORDER BY F.assurance_id IS NOT NULL ASC, `name_assurance` ASC";
     $req = $db->prepare($sql);
-    $req->bindValue(":name", '%$name%');
-    $req->bindValue(":favorite", $favorite);
-    $req->bindValue(":category", $category);
+    $req->bindValue(":id_u", $id_user);
+    if ($name !== null && $name !== "") {
+        $req->bindValue(":name", "%$name%");
+    }
+    if ($favorite !== null) {
+        $req->bindValue(":favorite", $favorite);
+    }
+    if ($categories !== null) {
+        foreach ($categories as $i => $category) {
+            $req->bindValue(":category_$i", $category);
+        }
+    }
     $req->execute();
     return $req->fetchAll();
 }
@@ -158,5 +225,38 @@ function filter_assurance($name = "", $favorite = "1=1", $category = "1=1")
 // Réinitialiser le filtre des Assurances
 function reset_filter_assurance()
 {
+    $_SESSION['filter_name'] = null;
+    $_SESSION['filter_favorite'] = null;
+    $_SESSION['filter_categories'] = null;
     return get_all_assurances();
+}
+
+// Exporter les Assurances en CSV
+function export_assurances_to_csv()
+{
+    $db = get_db();
+
+    $sql = "SELECT A.name_assurance, A.url_assurance, A.username_assurance, A.password_assurance, A.code_courtage_assurance,C.name_category,T.name_type_category
+    FROM `Assurance` AS A
+    JOIN `Propose` AS P ON P.assurance_id=A.id_assurance
+    JOIN `Category` AS C ON C.id_category=P.category_id
+    JOIN `Type_Category` AS T ON T.id_type_category=C.type_category_id";
+    $req = $db->query($sql);
+    $data = $req->fetchAll();
+
+    # EXPORTER #
+
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename=assurances.csv');
+
+    $output = fopen('php://output', 'w');
+    fputcsv($output, array('Nom', 'URL', 'Identifiant', 'Mot de passe', 'Code courtage', 'Catégorie', 'Type de catégorie'));
+
+    foreach ($data as $row) {
+        $row['password_assurance'] = openssl_decrypt($row['password_assurance'], 'AES-256-CBC', VAULT_AES_KEY, 0, VAULT_AES_IV);
+        fputcsv($output, $row);
+    }
+
+    fclose($output);
+    exit;
 }

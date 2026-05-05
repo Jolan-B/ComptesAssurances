@@ -51,7 +51,7 @@ function add_user($name, $email, $password, $is_admin)
 }
 
 // Modifier un utilisateur
-function update_user($id, $name, $email, $password, $is_admin)
+function edit_user($id, $name, $email, $password, $is_admin)
 {
     $db = get_db();
     $pwd_hash = password_hash($password, PASSWORD_BCRYPT);

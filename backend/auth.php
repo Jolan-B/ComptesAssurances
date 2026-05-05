@@ -4,19 +4,20 @@
 session_start();
 
 // Vérifie si l'utilisateur est connecté, sinon redirige vers login
-function check_auth($id)
+function check_auth()
 {
-    if (!isset($_SESSION[$id]) || !$_SESSION[$id]) {
+    if (!isset($_SESSION["id_user"]) || !$_SESSION["id_user"]) {
         wp_redirect(plugin_dir_url(__FILE__) . 'frontend/views/login.html.php');
         exit;
     }
 }
 
 // Vérifie si l'utilisateur est admin
-function is_admin($id)
+function is_admin()
 {
+    $id = $_SESSION["id_user"] ?? null;
 
-    check_auth($id);
+    check_auth();
 
     $db = get_db();
 
@@ -28,9 +29,7 @@ function is_admin($id)
     $req = $db->prepare($sql);
     $req->bindValue(":id", $id);
     $req->execute();
-    $is_admin = $req->fetch();
-
-    return $is_admin;
+    return (bool) $req->fetchColumn();
 }
 
 // Connecte l'utilisateur : vérifie nom+mdp en BDD, stocke en session
@@ -48,7 +47,7 @@ function login($username, $password)
 
     foreach ($passwords as $p) {
         if (password_verify($password, $p['password_user'])) {
-            $_SESSION[$p["id_user"]] = true;
+            $_SESSION["id_user"] = $p["id_user"];
             wp_redirect(plugin_dir_url(__FILE__) . 'frontend/views/dashboard.html.php');
             exit;
         }
@@ -59,7 +58,9 @@ function login($username, $password)
 }
 
 // Déconnecte l'utilisateur : détruit la session
-function logout($id)
+function logout()
 {
-    $_SESSION[$id] = null;
+    $_SESSION["id_user"] = null;
+    wp_redirect(plugin_dir_url(__FILE__) . 'frontend/views/login.html.php');
+    exit;
 }

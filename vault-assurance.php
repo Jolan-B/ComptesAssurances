@@ -58,8 +58,7 @@ DROP TABLE IF EXISTS Favorite, Propose, Assurance, Category, Type_Category, App_
     password_assurance TEXT NOT NULL,  -- AES chiffré
     code_courtage_assurance VARCHAR(255),
     image_assurance VARCHAR(255),
-    commentary_assurance TEXT,
-    is_favorite BOOLEAN DEFAULT FALSE
+    commentary_assurance TEXT
 );";
   $db->exec($sql);
 
@@ -101,9 +100,10 @@ DROP TABLE IF EXISTS Favorite, Propose, Assurance, Category, Type_Category, App_
     id_link INT AUTO_INCREMENT PRIMARY KEY,
     name_link VARCHAR(50) NOT NULL,
     url_link VARCHAR(255) NOT NULL, 
-    username_link VARCHAR(255) NULL,
+    username_link VARCHAR(255),
     password_link TEXT NULL,
-    image_link VARCHAR(255) NULL
+    image_link VARCHAR(255),
+    commentary_link TEXT
 );";
   $db->exec($sql);
 
@@ -122,7 +122,7 @@ INSERT INTO Type_Category VALUES
   $hash = password_hash('admin123', PASSWORD_BCRYPT);
   $sql = "
 INSERT INTO App_User (is_admin, name_user, email_user, password_user) VALUES 
-(1, 'admin','admin@sily.fr' :pwd );";
+(1, 'admin','admin@sily.fr', :pwd );";
 
   $req = $db->prepare($sql);
   $req->bindValue(":pwd", $hash);
