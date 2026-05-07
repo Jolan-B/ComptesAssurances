@@ -14,10 +14,8 @@ function get_all_users($by_name = true)
 
     $sql = "SELECT `id_user` AS id ,`name_user` AS name,`email_user` AS email
     FROM `App_User`
-    ORDER BY `name_user` :order";
-    $req = $db->prepare($sql);
-    $req->bindValue(":order", $name_order);
-    $req->execute();
+    ORDER BY `name_user` $name_order";
+    $req = $db->query($sql);
     return $req->fetchAll();
 }
 

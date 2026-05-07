@@ -3,7 +3,7 @@
 require_once plugin_dir_path(__FILE__) . '../models/Assurance.php';
 require_once plugin_dir_path(__FILE__) . '../models/Link.php';
 require_once plugin_dir_path(__FILE__) . '../models/User.php';
-require_once plugin_dir_path(__FILE__) . '../auth.php';
+require_once plugin_dir_path(__FILE__) . '../config/auth.php';
 
 
 function check_post_get_action($tab)
@@ -39,7 +39,7 @@ switch ($action) {
 
             add_assurance($name, $url, $username, $pwd, $comm, $categories, $cc, $img);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/dashboard.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../public/dashboard.php');
             exit;
         }
         break;
@@ -58,7 +58,7 @@ switch ($action) {
 
             edit_assurance($id, $name, $url, $username, $pwd, $comm, $categories, $cc, $img);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/dashboard.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../public/dashboard.php');
             exit;
         }
         break;
@@ -74,7 +74,7 @@ switch ($action) {
 
             add_link($name, $url, $username, $pwd, $comm, $img);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/dashboard.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../public/dashboard.php');
             exit;
         }
         break;
@@ -92,7 +92,7 @@ switch ($action) {
 
             edit_link($id, $name, $url, $username, $pwd, $comm, $img);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/dashboard.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../public/dashboard.php');
             exit;
         }
         break;
@@ -107,7 +107,7 @@ switch ($action) {
 
             add_user($name, $email, $pwd, $is_admin);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/dashboard.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../public/dashboard.php');
             exit;
         }
         break;
@@ -123,7 +123,7 @@ switch ($action) {
 
             edit_user($id, $name, $email, $pwd, $is_admin);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/dashboard.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../public/dashboard.php');
             exit;
         }
         break;
@@ -136,7 +136,7 @@ switch ($action) {
 
         save_filter_assurance($name, $is_favorite, $categories);
 
-        wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/dashboard.html.php');
+        wp_redirect(plugin_dir_url(__FILE__) . '../../public/dashboard.php');
         exit;
 
 }

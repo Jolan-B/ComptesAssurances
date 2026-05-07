@@ -1,6 +1,6 @@
 <?php
 
-require_once plugin_dir_path(__FILE__) . '../config.php';
+require_once plugin_dir_path(__FILE__) . '../config/auth.php';
 
 $token = $_POST['token'] ?? null;
 $pwd = $_POST['password_user'] ?? null;
@@ -22,5 +22,5 @@ $req->bindValue(":pwd", $pwd_hash);
 $req->bindValue(":token", $token);
 $req->execute();
 
-wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/login/login.html.php');
+wp_redirect(plugin_dir_url(__FILE__) . '../../public/login.php');
 exit;

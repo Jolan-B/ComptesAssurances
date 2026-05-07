@@ -7,7 +7,7 @@ session_start();
 function check_auth()
 {
     if (!isset($_SESSION["id_user"]) || !$_SESSION["id_user"]) {
-        wp_redirect(plugin_dir_url(__FILE__) . 'frontend/views/login.html.php');
+        wp_redirect(plugin_dir_url(__FILE__) . 'app/views/login/login.html.php');
         exit;
     }
 }
@@ -48,7 +48,7 @@ function login($username, $password)
     foreach ($passwords as $p) {
         if (password_verify($password, $p['password_user'])) {
             $_SESSION["id_user"] = $p["id_user"];
-            wp_redirect(plugin_dir_url(__FILE__) . 'frontend/views/dashboard.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . 'app/public/dashboard.php');
             exit;
         }
     }
@@ -61,6 +61,6 @@ function login($username, $password)
 function logout()
 {
     $_SESSION["id_user"] = null;
-    wp_redirect(plugin_dir_url(__FILE__) . 'frontend/views/login.html.php');
+    wp_redirect(plugin_dir_url(__FILE__) . 'app/views/login/login.html.php');
     exit;
 }

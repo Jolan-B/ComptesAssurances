@@ -1,7 +1,9 @@
 <?php
 
-define('VAULT_AES_KEY', 'une_clé_32_caractères');
-define('VAULT_AES_IV', 'un_iv_16_caractères');
+// Charge les variables d'environnement depuis .env
+$dotenv = parse_ini_file(__DIR__ . '/../../.env');
+define('VAULT_AES_KEY', $dotenv['VAULT_AES_KEY']);
+define('VAULT_AES_IV', $dotenv['VAULT_AES_IV']);
 
 // Connexion à la base de données :
 function get_db()

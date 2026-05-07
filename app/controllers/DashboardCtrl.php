@@ -1,8 +1,9 @@
 <?php
 
+require_once plugin_dir_path(__FILE__) . '../config/auth.php';
 require_once plugin_dir_path(__FILE__) . '../models/Assurance.php';
-require_once plugin_dir_path(__FILE__) . '../models/Categorie.php';
-require_once plugin_dir_path(__FILE__) . '../models/TypeCategorie.php';
+require_once plugin_dir_path(__FILE__) . '../models/Category.php';
+require_once plugin_dir_path(__FILE__) . '../models/TypeCategory.php';
 require_once plugin_dir_path(__FILE__) . '../models/Link.php';
 
 // Vérifie que l'utilisateur est connecté
@@ -21,4 +22,4 @@ $categories = get_all_categories();
 $links = get_all_links();
 
 // Charge la vue
-require_once plugin_dir_path(__FILE__) . '../../frontend/views/dashboard.html.php';
+require_once plugin_dir_path(__FILE__) . '../../public/dashboard.php';
