@@ -47,27 +47,42 @@ function vault_router()
     return; // pas une requête vault, WordPress continue normalement
 
   switch ($page) {
+
     case 'login':
       require_once VAULT_PATH . 'frontend/views/login/login.html.php';
       exit;
+
     case 'forgot-password':
       require_once VAULT_PATH . 'frontend/views/login/forgot-password.html.php';
       exit;
+
+    case 'forgot-password-send':
+      require_once VAULT_PATH . 'backend/controllers/ForgotPasswordCtrl.php';
+      exit;
+
     case 'reset-password':
       require_once VAULT_PATH . 'frontend/views/login/reset-password.html.php';
       exit;
+
+    case 'login-after-reset-password':
+      require_once VAULT_PATH . 'backend/controllers/ResetPasswordCtrl.php';
+      exit;
+
     case 'dashboard':
       vault_check_auth(); // vérifier la session avant
       require_once VAULT_PATH . 'frontend/views/assurance/filter-assurance.html.php';
       exit;
+
     case 'category-management':
       vault_check_auth(); // vérifier la session avant
       require_once VAULT_PATH . 'frontend/views/category/show-category.html.php';
       exit;
+
     case 'type-category-management':
       vault_check_auth(); // vérifier la session avant
       require_once VAULT_PATH . 'frontend/views/type_category/show-type-category.html.php';
       exit;
+
     case 'user-management':
       vault_check_auth(); // vérifier la session avant
       if (!vault_is_admin()) {
@@ -76,6 +91,7 @@ function vault_router()
       }
       require_once VAULT_PATH . 'frontend/views/user/show-user.html.php';
       exit;
+
     default:
       wp_redirect(home_url('/?vault=login'));
       exit;

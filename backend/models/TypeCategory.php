@@ -36,7 +36,7 @@ function get_all_types_category($order_by_name = null, $order_by_nb_category = n
 }
 
 // Récupérer un Type de Catégorie
-function get_type_category($id)
+function vault_get_type_category($id)
 {
     $db = get_db();
 

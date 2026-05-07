@@ -19,7 +19,7 @@
     <section class="profil_section">
 
         <div class="profil_photo">
-            <img src="../../assets/images/account_circle_black.png" />
+            <img src="<?= VAULT_URL . 'frontend/assets/images/account_circle_black.png' ?>" />
         </div>
 
         <div class="profil_option pointer">

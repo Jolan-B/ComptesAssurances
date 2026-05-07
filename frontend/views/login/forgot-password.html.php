@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mot de passe oublié</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="icon" type="image/svg+xml" href="../../assets/images/logo-sily.png" />
+    <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/login.css' ?>">
+    <link rel="icon" type="image/svg+xml" href="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>" />
 </head>
 
 <body class="body_login">
@@ -16,12 +16,11 @@
 
 
             <div>
-                <img src="../../assets/images/logo-sily.png">
+                <img src="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>">
                 <span>Mot de passe oublié</span>
             </div>
 
-            <form action="<?#= plugin_dir_url(__FILE__) . '../../backend/controllers/ForgotPasswordCtrl.php' ?>"
-                method="post">
+            <form action="<?= home_url('/?vault=forgot-password-send') ?>" method="post">
 
                 <div>
                     <label for="email">Email</label>
@@ -31,7 +30,7 @@
                 <?php
                 $type_add_button = "submit";
                 $txt_add_button = "Envoyer";
-                include '../../components/add-button.html.php';
+                include VAULT_PATH . 'frontend/components/add-button.html.php';
                 ?>
 
             </form>

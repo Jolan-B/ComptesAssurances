@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connection</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="icon" type="image/svg+xml" href="../../assets/images/logo-sily.png" />
+    <title>Connexion</title>
+    <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/login.css' ?>">
+    <link rel="icon" type="image/svg+xml" href="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>" />
 </head>
 
 <body class="body_login">
@@ -16,13 +16,11 @@
 
 
             <div>
-                <img src="../../assets/images/logo-sily.png">
+                <img src="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>">
                 <span>Authentification</span>
             </div>
 
-            <form action="
-            <?#=  plugin_dir_url(__FILE__) . '../../backend/controllers/LoginCtrl.php' ?>
-            " method="post">
+            <form action="<?= home_url('/?vault=login') ?>" method="post">
 
                 <div>
                     <label for="username">Nom utilisateur</label>
@@ -32,14 +30,14 @@
                 <div>
                     <label for="pwd">Mot de passe</label>
                     <input type="password" name="password_user" id="pwd" placeholder="Entrez votre mot de passe">
-                    <a href="forgot-password.html.php">Mot de passe oublié ?</a>
+                    <a href="<?= home_url('/?vault=forgot-password') ?>">Mot de passe oublié ?</a>
                 </div>
 
 
                 <?php
                 $type_add_button = "submit";
                 $txt_add_button = "Connexion";
-                include '../../components/add-button.html.php';
+                include VAULT_PATH . 'frontend/components/add-button.html.php';
                 ?>
 
             </form>

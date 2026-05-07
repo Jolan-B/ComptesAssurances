@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réinitialisation du mot de passe</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="icon" type="image/svg+xml" href="../../assets/images/logo-sily.png" />
+    <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/login.css' ?>">
+    <link rel="icon" type="image/svg+xml" href="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>" />
 </head>
 
 <body class="body_login">
@@ -16,12 +16,11 @@
         <section class="bloc_login">
 
             <div>
-                <img src="../../assets/images/logo-sily.png">
+                <img src="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>">
                 <span>Mot de Passe</span>
             </div>
 
-            <form action="<?#=  plugin_dir_url(__FILE__) . '../../backend/controllers/ResetPasswordCtrl.php' ?>"
-                method="post">
+            <form action="<?= home_url('/?vault=login-after-reset-password') ?>" method="post">
 
                 <div>
                     <label for="pwd">Nouveau mot de passe</label>
@@ -40,7 +39,7 @@
                 <?php
                 $type_add_button = "submit";
                 $txt_add_button = "Enregister";
-                include '../../components/add-button.html.php';
+                include VAULT_PATH . 'frontend/components/add-button.html.php';
                 ?>
 
             </form>

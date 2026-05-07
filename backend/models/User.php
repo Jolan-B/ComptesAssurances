@@ -1,7 +1,7 @@
 <?php
 
 // Récupérer tous les utilisateurs
-function get_all_users($by_name = true)
+function vault_get_all_users($by_name = true)
 {
     // Pour filtrer en fonction du nom (ASC / DESC)
     $name_order = "ASC";
@@ -20,7 +20,7 @@ function get_all_users($by_name = true)
 }
 
 // Récupérer un utilisateur par son id
-function get_user($id)
+function vault_get_user($id)
 {
     $db = get_db();
     $sql = "SELECT `id_user` AS id ,`name_user` AS name,`email_user` AS email
@@ -34,7 +34,7 @@ function get_user($id)
 }
 
 // Ajouter un utilisateur
-function add_user($name, $email, $password, $is_admin)
+function vault_add_user($name, $email, $password, $is_admin)
 {
     $db = get_db();
     $pwd_hash = password_hash($password, PASSWORD_BCRYPT);
@@ -49,7 +49,7 @@ function add_user($name, $email, $password, $is_admin)
 }
 
 // Modifier un utilisateur
-function edit_user($id, $name, $email, $password, $is_admin)
+function vault_edit_user($id, $name, $email, $password, $is_admin)
 {
     $db = get_db();
     $pwd_hash = password_hash($password, PASSWORD_BCRYPT);
@@ -67,7 +67,7 @@ function edit_user($id, $name, $email, $password, $is_admin)
 }
 
 // Modifier le mdp utilisateur
-function update_password_user($id, $ex_input_pwd, $new_pwd, $retype_pwd)
+function vault_update_password_user($id, $ex_input_pwd, $new_pwd, $retype_pwd)
 {
     $db = get_db();
 
@@ -101,7 +101,7 @@ function update_password_user($id, $ex_input_pwd, $new_pwd, $retype_pwd)
 }
 
 // Supprimer un utilisateur
-function delete_user($id)
+function vault_delete_user($id)
 {
     $db = get_db();
     $sql = "DELETE FROM `App_User`

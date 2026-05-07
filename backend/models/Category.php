@@ -5,7 +5,7 @@ define('ORDER_BY_NAME_CATEGORY_DESC', '`name_category` DESC');
 
 
 // Récupérer toutes les Catégories
-function get_all_categories($order_by_category_name = null, $order_by_type_category_name = null)
+function vault_get_all_categories($order_by_category_name = null, $order_by_type_category_name = null)
 {
 
     // De même que dans TypeCategorie.php
@@ -36,7 +36,7 @@ function get_all_categories($order_by_category_name = null, $order_by_type_categ
 }
 
 // Récupérer une Catégorie
-function get_category($id)
+function vault_get_category($id)
 {
     $db = get_db();
 

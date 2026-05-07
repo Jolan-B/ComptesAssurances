@@ -33,11 +33,11 @@ switch ($action) {
         break;
 
     case 'delete_user':
-        if (pvault_check_required_fields([$_POST['id_user'] ?? null])) {
+        if (vault_check_required_fields([$_POST['id_user'] ?? null])) {
 
             $id = intval(strip_tags($_POST['id_user']));
 
-            delete_user($id);
+            vault_delete_user($id);
             wp_redirect(home_url('/?vault=user-management'));
             exit;
         }

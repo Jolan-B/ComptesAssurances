@@ -89,7 +89,7 @@ switch ($action) {
             $pwd = strip_tags($_POST['password_user']);
             $is_admin = boolval(strip_tags($_POST['is_admin'] ?? false));
 
-            add_user($name, $email, $pwd, $is_admin);
+            vault_add_user($name, $email, $pwd, $is_admin);
 
             wp_redirect(home_url('/?vault=user-management'));
             exit;
@@ -105,7 +105,7 @@ switch ($action) {
             $pwd = strip_tags($_POST['password_user']);
             $is_admin = boolval(strip_tags($_POST['is_admin']));
 
-            edit_user($id, $name, $email, $pwd, $is_admin);
+            vault_edit_user($id, $name, $email, $pwd, $is_admin);
 
             wp_redirect(home_url('/?vault=user-management'));
             exit;

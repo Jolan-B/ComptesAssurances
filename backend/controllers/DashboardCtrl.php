@@ -10,7 +10,7 @@ $assurances = filter_assurance();
 $type_categories = get_all_types_category();
 
 // Récupère les catégories pour le filtre
-$categories = get_all_categories();
+$categories = vault_get_all_categories();
 
 // Récupère les liens
 $links = get_all_links();
