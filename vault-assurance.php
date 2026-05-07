@@ -6,10 +6,10 @@
  * Author: Jolan
  */
 
-require_once plugin_dir_path(__FILE__) . 'app/config/database.php';
-require_once plugin_dir_path(__FILE__) . 'app/config/auth.php';
-require_once plugin_dir_path(__FILE__) . 'app/models/Category.php';
-require_once plugin_dir_path(__FILE__) . 'app/models/TypeCategory.php';
+require_once plugin_dir_path(__FILE__) . 'backend/config.php';
+require_once plugin_dir_path(__FILE__) . 'backend/auth.php';
+require_once plugin_dir_path(__FILE__) . 'backend/models/Category.php';
+require_once plugin_dir_path(__FILE__) . 'backend/models/TypeCategory.php';
 
 // Hook d'activation du plugin
 register_activation_hook(__FILE__, 'vault_activate');

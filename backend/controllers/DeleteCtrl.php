@@ -5,7 +5,7 @@ require_once plugin_dir_path(__FILE__) . '../models/User.php';
 require_once plugin_dir_path(__FILE__) . '../models/Category.php';
 require_once plugin_dir_path(__FILE__) . '../models/Link.php';
 require_once plugin_dir_path(__FILE__) . '../models/TypeCategory.php';
-require_once plugin_dir_path(__FILE__) . '../config/auth.php';
+require_once plugin_dir_path(__FILE__) . '../auth.php';
 
 function pcheck_post_action($tab)
 {
@@ -33,7 +33,7 @@ switch ($action) {
             $id = intval(strip_tags($_POST['id_assurance']));
 
             delete_assurance($id);
-            wp_redirect(plugin_dir_url(__FILE__) . '../../public/dashboard.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/assurance/filter-assurance.html.php');
             exit;
         }
         break;
@@ -44,7 +44,7 @@ switch ($action) {
             $id = intval(strip_tags($_POST['id_link']));
 
             delete_link($id);
-            wp_redirect(plugin_dir_url(__FILE__) . '../../public/dashboard.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/assurance/filter-assurance.html.php');
             exit;
         }
         break;
@@ -55,7 +55,7 @@ switch ($action) {
             $id = intval(strip_tags($_POST['id_user']));
 
             delete_user($id);
-            wp_redirect(plugin_dir_url(__FILE__) . '../views/user/show-user.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/user/show-user.html.php');
             exit;
         }
         break;
@@ -66,7 +66,7 @@ switch ($action) {
             $id = intval(strip_tags($_POST['id_category']));
 
             delete_category($id);
-            wp_redirect(plugin_dir_url(__FILE__) . '../views/category/show-category.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/category/show-category.html.php');
             exit;
         }
         break;
@@ -77,7 +77,7 @@ switch ($action) {
             $id = intval(strip_tags($_POST['id_type_category']));
 
             delete_type_category($id);
-            wp_redirect(plugin_dir_url(__FILE__) . '../views/type_category/show-type-category.html.php');
+            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/type_category/show-type-category.html.php');
             exit;
         }
         break;

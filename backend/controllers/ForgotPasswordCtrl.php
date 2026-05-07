@@ -1,6 +1,6 @@
 <?php
 
-require_once plugin_dir_path(__FILE__) . '../config/auth.php';
+require_once plugin_dir_path(__FILE__) . '../config.php';
 
 $email = $_POST["email_user"] ?? null;
 
@@ -41,5 +41,5 @@ $msg = "Bonjour,\nVoici le lien (valable 1h) pour réinitiliser votre mot de pas
 
 wp_mail($email, $subject, $msg);
 
-wp_redirect(plugin_dir_url(__FILE__) . '../../public/login.php');
+wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/login/login.html.php');
 exit;
