@@ -1,9 +1,7 @@
 <?php
 
-const ORDER_BY_NAME_CATEGORY_ASC = "`name_category` ASC";
-const ORDER_BY_NAME_CATEGORY_DESC = "`name_category` DESC";
-const ORDER_BY_NAME_TYPE_CATEGORY_ASC = "`name_type_category` ASC";
-const ORDER_BY_NAME_TYPE_CATEGORY_DESC = "`name_type_category` DESC";
+define('ORDER_BY_NAME_CATEGORY_ASC', '`name_category` ASC');
+define('ORDER_BY_NAME_CATEGORY_DESC', '`name_category` DESC');
 
 
 // Récupérer toutes les Catégories

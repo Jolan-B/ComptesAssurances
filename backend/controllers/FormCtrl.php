@@ -1,22 +1,6 @@
 <?php
 
-require_once plugin_dir_path(__FILE__) . '../models/Assurance.php';
-require_once plugin_dir_path(__FILE__) . '../models/Link.php';
-require_once plugin_dir_path(__FILE__) . '../models/User.php';
-require_once plugin_dir_path(__FILE__) . '../auth.php';
-
-
-function check_post_get_action($tab)
-{
-    foreach ($tab as $value) {
-        if (!isset($value) || empty($value)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-check_auth();
+vault_check_auth();
 
 $action = $_POST['action'] ?? null;
 
@@ -27,7 +11,7 @@ if ($action == null) {
 switch ($action) {
 
     case 'add_assurance':
-        if (check_post_get_action([$_POST["name_assurance"] ?? null, $_POST["url_assurance"] ?? null, $_POST["username_assurance"] ?? null, $_POST["password_assurance"] ?? null])) {
+        if (vault_check_required_fields([$_POST["name_assurance"] ?? null, $_POST["url_assurance"] ?? null, $_POST["username_assurance"] ?? null, $_POST["password_assurance"] ?? null])) {
             $name = strip_tags($_POST["name_assurance"]);
             $url = strip_tags($_POST["url_assurance"]);
             $username = strip_tags($_POST["username_assurance"]);
@@ -39,13 +23,13 @@ switch ($action) {
 
             add_assurance($name, $url, $username, $pwd, $comm, $categories, $cc, $img);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/assurance/filter-assurance.html.php');
+            wp_redirect(home_url('/?vault=dashboard'));
             exit;
         }
         break;
 
     case 'edit_assurance':
-        if (check_post_get_action([$_POST["id_assurance"] ?? null, $_POST["name_assurance"] ?? null, $_POST["url_assurance"] ?? null, $_POST["username_assurance"] ?? null, $_POST["password_assurance"] ?? null])) {
+        if (vault_check_required_fields([$_POST["id_assurance"] ?? null, $_POST["name_assurance"] ?? null, $_POST["url_assurance"] ?? null, $_POST["username_assurance"] ?? null, $_POST["password_assurance"] ?? null])) {
             $id = intval(strip_tags($_POST["id_assurance"]));
             $name = strip_tags($_POST["name_assurance"]);
             $url = strip_tags($_POST["url_assurance"]);
@@ -58,13 +42,13 @@ switch ($action) {
 
             edit_assurance($id, $name, $url, $username, $pwd, $comm, $categories, $cc, $img);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/assurance/filter-assurance.html.php');
+            wp_redirect(home_url('/?vault=dashboard'));
             exit;
         }
         break;
 
     case 'add_link':
-        if (check_post_get_action([$_POST["name_link"] ?? null, $_POST["url_link"] ?? null])) {
+        if (vault_check_required_fields([$_POST["name_link"] ?? null, $_POST["url_link"] ?? null])) {
             $name = strip_tags($_POST["name_link"]);
             $url = strip_tags($_POST["url_link"]);
             $username = strip_tags($_POST["username_link"] ?? "");
@@ -74,13 +58,13 @@ switch ($action) {
 
             add_link($name, $url, $username, $pwd, $comm, $img);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/assurance/filter-assurance.html.php');
+            wp_redirect(home_url('/?vault=dashboard'));
             exit;
         }
         break;
 
     case 'edit_link':
-        if (check_post_get_action([$_POST['id_link'] ?? null, $_POST['name_link'] ?? null, $_POST['url_link'] ?? null])) {
+        if (vault_check_required_fields([$_POST['id_link'] ?? null, $_POST['name_link'] ?? null, $_POST['url_link'] ?? null])) {
 
             $id = intval(strip_tags($_POST['id_link']));
             $name = strip_tags($_POST['name_link']);
@@ -92,13 +76,13 @@ switch ($action) {
 
             edit_link($id, $name, $url, $username, $pwd, $comm, $img);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/assurance/filter-assurance.html.php');
+            wp_redirect(home_url('/?vault=dashboard'));
             exit;
         }
         break;
 
     case 'add_user':
-        if (check_post_get_action([$_POST['name_user'] ?? null, $_POST['email_user'] ?? null, $_POST['password_user'] ?? null, $_POST['is_admin'] ?? null])) {
+        if (vault_check_required_fields([$_POST['name_user'] ?? null, $_POST['email_user'] ?? null, $_POST['password_user'] ?? null, $_POST['is_admin'] ?? null])) {
 
             $name = strip_tags($_POST['name_user']);
             $email = strip_tags($_POST['email_user']);
@@ -107,13 +91,13 @@ switch ($action) {
 
             add_user($name, $email, $pwd, $is_admin);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/assurance/filter-assurance.html.php');
+            wp_redirect(home_url('/?vault=user-management'));
             exit;
         }
         break;
 
     case 'edit_user':
-        if (check_post_get_action([$_POST['name_user'] ?? null, $_POST['email_user'] ?? null, $_POST['password_user'] ?? null, $_POST['is_admin'] ?? null])) {
+        if (vault_check_required_fields([$_POST['name_user'] ?? null, $_POST['email_user'] ?? null, $_POST['password_user'] ?? null, $_POST['is_admin'] ?? null])) {
 
             $id = intval(strip_tags($_POST['id_user']));
             $name = strip_tags($_POST['name_user']);
@@ -123,7 +107,7 @@ switch ($action) {
 
             edit_user($id, $name, $email, $pwd, $is_admin);
 
-            wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/assurance/filter-assurance.html.php');
+            wp_redirect(home_url('/?vault=user-management'));
             exit;
         }
         break;
@@ -136,7 +120,7 @@ switch ($action) {
 
         save_filter_assurance($name, $is_favorite, $categories);
 
-        wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/assurance/filter-assurance.html.php');
+        wp_redirect(home_url('/?vault=dashboard'));
         exit;
 
 }

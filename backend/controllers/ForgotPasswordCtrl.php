@@ -1,7 +1,5 @@
 <?php
 
-require_once plugin_dir_path(__FILE__) . '../config.php';
-
 $email = $_POST["email_user"] ?? null;
 
 if ($email === null) {
@@ -37,9 +35,8 @@ $req->execute();
 
 $subject = "Réinitialisation de votre mot de passe Comptes Sily";
 
-$msg = "Bonjour,\nVoici le lien (valable 1h) pour réinitiliser votre mot de passe pour accéder aux Comptes Sily : reset-password.php?token=$token";
-
+$msg = "Bonjour,\nVoici le lien (valable 1h) pour réinitialiser votre mot de passe : " . home_url('/?vault=reset-password&token=' . $token);
 wp_mail($email, $subject, $msg);
 
-wp_redirect(plugin_dir_url(__FILE__) . '../../frontend/views/login/login.html.php');
+wp_redirect(home_url('/?vault=login'));
 exit;

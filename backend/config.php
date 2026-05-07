@@ -1,9 +1,27 @@
 <?php
 
-define('VAULT_AES_KEY', 'une_clé_32_caractères');
-define('VAULT_AES_IV', 'un_iv_16_caractères');
+// Chargement du .env
+$env = parse_ini_file(dirname(__DIR__) . '/.env');
+
+define('DB_HOST', $env['DB_HOST']);
+define('DB_NAME', $env['DB_NAME']);
+define('DB_USER', $env['DB_USER']);
+define('DB_PASSWORD', $env['DB_PASSWORD']);
+define('VAULT_AES_KEY', $env['VAULT_AES_KEY']);
+define('VAULT_AES_IV', $env['VAULT_AES_IV']);
 
 // Connexion à la base de données :
+
+function vault_check_required_fields($tab)
+{
+    foreach ($tab as $value) {
+        if (!isset($value) || empty($value)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 function get_db()
 {
 

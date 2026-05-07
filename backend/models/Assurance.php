@@ -180,7 +180,7 @@ function filter_assurance()
 {
     $id_user = $_SESSION["id_user"] ?? null;
     $name = $_SESSION['filter_name'] ?? null;
-    $favorite = $_SESSION['filter_favorite'] ?? null;
+    $favorite = $_SESSION['filter_is_favorite'] ?? null;
     $categories = $_SESSION['filter_categories'] ?? null;
 
     $db = get_db();
@@ -226,7 +226,7 @@ function filter_assurance()
 function reset_filter_assurance()
 {
     $_SESSION['filter_name'] = null;
-    $_SESSION['filter_favorite'] = null;
+    $_SESSION['filter_is_favorite'] = null;
     $_SESSION['filter_categories'] = null;
     return get_all_assurances();
 }

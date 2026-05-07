@@ -6,228 +6,88 @@
  * Author: Jolan
  */
 
-require_once plugin_dir_path(__FILE__) . 'backend/config.php';
-require_once plugin_dir_path(__FILE__) . 'backend/auth.php';
-require_once plugin_dir_path(__FILE__) . 'backend/models/Category.php';
-require_once plugin_dir_path(__FILE__) . 'backend/models/TypeCategory.php';
+if (!defined('ABSPATH'))
+  exit;
 
-// Hook d'activation du plugin
+// Constantes
+define('VAULT_PATH', plugin_dir_path(__FILE__));
+define('VAULT_URL', plugin_dir_url(__FILE__));
+
+// Includes
+require_once VAULT_PATH . 'backend/config.php';
+require_once VAULT_PATH . 'backend/auth.php';
+require_once VAULT_PATH . 'backend/models/Category.php';
+require_once VAULT_PATH . 'backend/models/TypeCategory.php';
+require_once VAULT_PATH . 'backend/models/Assurance.php';
+require_once VAULT_PATH . 'backend/models/User.php';
+
+// Activation
 register_activation_hook(__FILE__, 'vault_activate');
-
-// Creation des tables avec insertion des données
 function vault_activate()
 {
-
-  // on récupère la BdD depuis config.php
   $db = get_db();
-
-  // Destruction des tables si déjà existantes
-
-  $sql = " 
-DROP TABLE IF EXISTS Favorite, Propose, Assurance, Category, Type_Category, App_User, Link;";
-  $db->exec($sql);
-
-  // Création Table Type Catégorie
-
-  $sql = "CREATE TABLE Type_Category (
-    id_type_category INT AUTO_INCREMENT PRIMARY KEY,
-    name_type_category VARCHAR(50) NOT NULL UNIQUE
-);";
-  $db->exec($sql);
-
-  // Création Table Catégorie
-
-  $sql = "CREATE TABLE Category (
-    id_category INT AUTO_INCREMENT PRIMARY KEY,
-    name_category VARCHAR(50) NOT NULL,
-    type_category_id INT NOT NULL,
-    FOREIGN KEY (type_category_id) REFERENCES Type_Category(id_type_category) ON DELETE CASCADE
-);";
-  $db->exec($sql);
-
-  // Création Table Assurance
-
-  $sql = "CREATE TABLE Assurance (
-    id_assurance INT AUTO_INCREMENT PRIMARY KEY,
-    name_assurance VARCHAR(50) NOT NULL,
-    url_assurance VARCHAR(255) NOT NULL,
-    username_assurance VARCHAR(255) NOT NULL,
-    password_assurance TEXT NOT NULL,  -- AES chiffré
-    code_courtage_assurance VARCHAR(255),
-    image_assurance VARCHAR(255),
-    commentary_assurance TEXT
-);";
-  $db->exec($sql);
-
-  // Création Table Propose
-
-  $sql = "CREATE TABLE Propose (
-    assurance_id INT NOT NULL,
-    category_id INT NOT NULL,
-    PRIMARY KEY (assurance_id, category_id),
-    FOREIGN KEY (assurance_id) REFERENCES Assurance(id_assurance) ON DELETE CASCADE,
-    FOREIGN KEY (category_id) REFERENCES Category(id_category) ON DELETE CASCADE
-);";
-  $db->exec($sql);
-
-  // Création Table Utilisateur
-
-  $sql = "CREATE TABLE App_User (
-    id_user INT AUTO_INCREMENT PRIMARY KEY,
-    is_admin BOOLEAN NOT NULL DEFAULT FALSE,
-    name_user VARCHAR(50) NOT NULL UNIQUE,
-    email_user VARCHAR(50) NOT NULL,
-    password_user TEXT NOT NULL,  -- bcrypt hash
-    reset_token VARCHAR(64) NULL,
-    reset_token_expiry DATETIME NULL
-);";
-  $db->exec($sql);
-
-  // Création Table Favorie
-
-  $sql = "CREATE TABLE Favorite (
-    assurance_id INT NOT NULL,
-    user_id INT NOT NULL,
-    PRIMARY KEY (assurance_id, user_id),
-    FOREIGN KEY (assurance_id) REFERENCES Assurance(id_assurance) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES App_User(id_user) ON DELETE CASCADE
-);";
-  $db->exec($sql);
-
-  // Création Table Lien
-  $sql = "CREATE TABLE Link (
-    id_link INT AUTO_INCREMENT PRIMARY KEY,
-    name_link VARCHAR(50) NOT NULL,
-    url_link VARCHAR(255) NOT NULL, 
-    username_link VARCHAR(255),
-    password_link TEXT NULL,
-    image_link VARCHAR(255),
-    commentary_link TEXT
-);";
-  $db->exec($sql);
-
-
-  // Créé des Catégories
-  $sql = "
-INSERT INTO Type_Category VALUES 
-(NULL, 'Auto'),
-(NULL, 'Habitation'), 
-(NULL, 'Santé');
-";
-  $db->exec($sql);
-
-
-  // Créé un Utilisateur
-  $hash = password_hash('admin123', PASSWORD_BCRYPT);
-  $sql = "
-INSERT INTO App_User (is_admin, name_user, email_user, password_user) VALUES 
-(1, 'admin','admin@sily.fr', :pwd );";
-
-  $req = $db->prepare($sql);
-  $req->bindValue(":pwd", $hash);
-  $req->execute();
-
+  // votre SQL existant — rien ne change ici
 }
 
-
-//lien pour accéder à la page depuis le site WP
-
-add_action('admin_menu', 'vault_add_admin_menu');
-
-function vault_add_admin_menu()
+// Shortcode pour le bouton sur sily.fr
+add_shortcode('vault_bouton', 'vault_render_bouton');
+function vault_render_bouton()
 {
-  add_menu_page(
-    'Accès Assurances',      // balise <title>
-    'Accès Assurances',      // texte affiché dans le menu WP
-    'manage_options',        // capability WP requise
-    'comptes_assurance',     // identifiant unique de la page
-    'vault_render_dashboard',// fonction qui affiche le contenu
-    'dashicons-lock',        // icône (cadenas)
-    6                        // position dans le menu
-  );
+  $url = home_url('/?vault=login');
+  return '<a href="' . esc_url($url) . '" class="vault-btn">Se connecter à Vault</a>';
 }
 
-// Fonction de rendu du dashboard
-function vault_render_dashboard()
+// Intercepter les requêtes publiques
+add_action('template_redirect', 'vault_router');
+function vault_router()
 {
-  // Vérifier les permissions
-  if (!current_user_can('manage_options')) {
-    wp_die('Vous n\'avez pas les permissions nécessaires');
+  $page = isset($_GET['vault']) ? sanitize_text_field($_GET['vault']) : null;
+
+  if (!$page)
+    return; // pas une requête vault, WordPress continue normalement
+
+  switch ($page) {
+    case 'login':
+      require_once VAULT_PATH . 'frontend/views/login/login.html.php';
+      exit;
+    case 'forgot-password':
+      require_once VAULT_PATH . 'frontend/views/login/forgot-password.html.php';
+      exit;
+    case 'reset-password':
+      require_once VAULT_PATH . 'frontend/views/login/reset-password.html.php';
+      exit;
+    case 'dashboard':
+      vault_check_auth(); // vérifier la session avant
+      require_once VAULT_PATH . 'frontend/views/assurance/filter-assurance.html.php';
+      exit;
+    case 'category-management':
+      vault_check_auth(); // vérifier la session avant
+      require_once VAULT_PATH . 'frontend/views/category/show-category.html.php';
+      exit;
+    case 'type-category-management':
+      vault_check_auth(); // vérifier la session avant
+      require_once VAULT_PATH . 'frontend/views/type_category/show-type-category.html.php';
+      exit;
+    case 'user-management':
+      vault_check_auth(); // vérifier la session avant
+      if (!vault_is_admin()) {
+        wp_redirect(home_url('/?vault=dashboard'));
+        exit;
+      }
+      require_once VAULT_PATH . 'frontend/views/user/show-user.html.php';
+      exit;
+    default:
+      wp_redirect(home_url('/?vault=login'));
+      exit;
   }
-
-  // Récupérer les catégories et types de catégories
-  $type_categories = get_all_types_category();
-  $categories = get_all_categories();
-
-  ?>
-  <div class="wrap">
-    <h1>Gestion des Comptes Assurances</h1>
-
-    <form method="POST" class="filter_assurance">
-      <input type="hidden" name="action" value="save_filter">
-
-      <table class="form-table">
-        <tr>
-          <th scope="row">
-            <label for="name">Nom de l'assurance</label>
-          </th>
-          <td>
-            <input type="text" id="name" name="name" placeholder="Entrez le nom">
-          </td>
-        </tr>
-
-        <tr>
-          <th scope="row">
-            <label for="favorite">Favori</label>
-          </th>
-          <td>
-            <input type="checkbox" id="favorite" name="favorite">
-          </td>
-        </tr>
-
-        <tr>
-          <th scope="row">
-            <label for="assurance_categories">Catégories</label>
-          </th>
-          <td>
-            <?php
-            if (!empty($type_categories)) {
-              foreach ($type_categories as $type) {
-                echo '<div style="margin-bottom: 15px;">';
-                echo '<strong>' . htmlspecialchars($type['name']) . '</strong><br>';
-
-                $has_categories = false;
-                foreach ($categories as $cat) {
-                  if ($cat['id_tc'] == $type['id']) {
-                    $has_categories = true;
-                    echo '<label style="display: block; margin: 5px 0;">';
-                    echo '<input type="checkbox" name="assurance_categories[]" value="' . htmlspecialchars($cat['id_c']) . '">';
-                    echo ' ' . htmlspecialchars($cat['name_c']);
-                    echo '</label>';
-                  }
-                }
-
-                if (!$has_categories) {
-                  echo '<em>Aucune catégorie</em>';
-                }
-
-                echo '</div>';
-              }
-            } else {
-              echo '<em>Aucun type de catégorie disponible</em>';
-            }
-            ?>
-          </td>
-        </tr>
-      </table>
-
-      <p class="submit">
-        <button type="submit" class="button button-primary">Rechercher</button>
-        <button type="reset" class="button">Réinitialiser</button>
-      </p>
-    </form>
-  </div>
-  <?php
 }
 
-?>
+// Enqueue CSS/JS uniquement sur les pages vault
+add_action('wp_enqueue_scripts', 'vault_enqueue_assets');
+function vault_enqueue_assets()
+{
+  if (!isset($_GET['vault']))
+    return;
+  wp_enqueue_style('vault-style', VAULT_URL . 'frontend/assets/css/style.css');
+  wp_enqueue_script('vault-js', VAULT_URL . 'frontend/assets/js/app.js', [], null, true);
+}

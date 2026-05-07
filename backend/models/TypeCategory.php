@@ -1,20 +1,20 @@
 <?php
 
-const ORDER_BY_NAME_ASC = "`name_type_category` ASC";
-const ORDER_BY_NAME_DESC = "`name_type_category` DESC";
-const ORDER_BY_NB_CATEGORY_ASC = "`nb_category` ASC";
-const ORDER_BY_NB_CATEGORY_DESC = "`nb_category` DESC";
+define('ORDER_BY_NAME_TYPE_CATEGORY_ASC', '`name_type_category` ASC');
+define('ORDER_BY_NAME_TYPE_CATEGORY_DESC', '`name_type_category` DESC');
+define('ORDER_BY_NB_CATEGORY_ASC', '`nb_category` ASC');
+define('ORDER_BY_NB_CATEGORY_DESC', '`nb_category` DESC');
 
 
 // Récupérer les Types de Catégories
 // Trie en fonction des parametres
 function get_all_types_category($order_by_name = null, $order_by_nb_category = null)
 {
-    $order1 = ORDER_BY_NAME_ASC;
+    $order1 = ORDER_BY_NAME_TYPE_CATEGORY_ASC;
     $order2 = ORDER_BY_NB_CATEGORY_ASC;
 
     if ($order_by_name === false) {
-        $order1 = ORDER_BY_NAME_DESC;
+        $order1 = ORDER_BY_NAME_TYPE_CATEGORY_DESC;
     }
     if ($order_by_nb_category === false) {
         $order2 = ORDER_BY_NB_CATEGORY_DESC;
