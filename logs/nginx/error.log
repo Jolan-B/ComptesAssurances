@@ -1,0 +1,1 @@
+2026/05/07 11:31:49 [error] 18636#3168: *12 directory index of "C:/Users/PC/Local Sites/comptes-assurances/app/public/" is forbidden, client: 127.0.0.1, server: , request: "GET / HTTP/1.1", host: "comptes-assurances.test"
