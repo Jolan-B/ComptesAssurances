@@ -28,8 +28,7 @@ function get_all_categories($order_by_category_name = null, $order_by_type_categ
 
     $db = get_db();
 
-    $sql = "
-    SELECT C.id_category AS id, C.name_category, T.name_type_category
+    $sql = "SELECT C.id_category AS id, T.id_type_category AS id_tc, C.name_category AS name_c, T.name_type_category
     FROM `Category` AS C
     JOIN `Type_Category` AS T ON T.id_type_category = C.type_category_id
     GROUP BY C.id_category

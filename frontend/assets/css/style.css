@@ -6,26 +6,25 @@ body {
     --color_gold: #CA9C00;
     --color_gold_hover: rgb(136, 104, 0);
 
-    --color_grey: #b4b4b4;
-    --color_grey_hover: #a6a6a6;
+    --color_grey: #e0e0e0;
+    --color_grey_hover: #b4b4b4;
 
     /* TRANSITIONS */
 
+    --transition_very_fast: 0.1s;
     --transition_fast: 0.3s;
 
     /* TAILLE */
 
     --nav_bar_width: 60px;
+
+    --filter_assurance_width: 250px;
+
+    --label_font_size: 1.1em;
 }
 
 .pointer {
     cursor: pointer;
-}
-
-.submit_button {
-    background-color: red;
-    border: none;
-    padding: 0;
 }
 
 /* COMPONENTS */
@@ -34,19 +33,40 @@ body {
 
 .add_button {
     width: fit-content;
-    margin: 10px;
     padding: 10px 20px;
     border-radius: 12px;
+
+    border: none;
 
     align-self: center;
     text-align: center;
     font-weight: bold;
 
+    /* box-shadow:
+        inset 2px 2px 3px rgb(255 255 255 / 0.6),
+        inset -2px -2px 3px rgb(0 0 0 / 0.6); */
+
     background-color: var(--color_gold);
 }
 
 .add_button:hover {
+    color: white;
     background-color: var(--color_gold_hover);
+    transition: var(--transition_fast);
+}
+
+/* Red Button */
+
+.red_button {
+    background-color: var(--color_grey_hover);
+    border-radius: 12px;
+    font-weight: bold;
+    border: none;
+    color: white;
+}
+
+.red_button:hover {
+    background-color: red;
     transition: var(--transition_fast);
 }
 
@@ -80,8 +100,8 @@ body {
 }
 
 .menu_button:hover {
-    background-color: var(--color_grey_hover);
-    transition: var(--transition_fast);
+    border-bottom: 2px solid black;
+    transition: var(--transition_very_fast);
 }
 
 .profil_section {
@@ -137,30 +157,129 @@ body {
 
 /* Filter-Assurance */
 
-.filter {
+.list_assurance_link_page {
+    display: flex;
+    flex-direction: row;
+}
+
+.filter_assurance {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     width: fit-content;
-    height: calc(100vh - var(--nav_bar_width));
-    padding: 0 10px;
+    height: calc(100vh - var(--nav_bar_width) - 10px);
+    width: var(--filter_assurance_width);
+    padding: 5px 10px;
 
     background-color: var(--color_grey);
 }
 
-label {
+.filter_assurance label {
     font-weight: bold;
     margin-top: 10px;
 }
 
-.submit_filter {
-    align-self: flex-end;
+.filter_assurance_categories {
+    background-color: red;
+}
+
+.filter_assurance_categories>div {
+    overflow-y: scroll;
+}
+
+.buttons_filter_assurances {
+    display: flex;
+    justify-content: space-between;
+    vertical-align: end;
+}
+
+.list_assurance_link {
+    width: calc(100% - var(--filter_assurance_width));
+}
+
+.list_assurance_title_button {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 5px 10px;
+
+    font-weight: bold;
+    font-size: 1.2em;
 }
 
 /* Login */
 
+.body_login>div {
+    height: 100vh;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .bloc_login {
     background-color: var(--color_grey);
+    border-radius: 12px;
+    width: 600px;
+    padding-top: 10px;
+    align-self: center;
+    padding-bottom: 10px;
+}
+
+.bloc_login>div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin: 20px 60px 20px 0px;
+
+    font-size: 1.5em;
+}
+
+.bloc_login>div>img {
+
+    position: relative;
+    left: 65%;
+    height: 60px;
+    align-self: baseline;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.bloc_login>form {
+    padding-left: 20px;
+}
+
+.bloc_login>form>div {
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+}
+
+.bloc_login>form>div>label {
+    font-weight: bold;
+    font-size: var(--label_font_size);
+}
+
+.bloc_login>form>div>input {
+    width: 300px;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+.bloc_login>form>div>a {
+    margin-left: 10px;
+    width: fit-content;
+}
+
+.bloc_login>form>button {
+    margin-top: 20px;
+    position: relative;
+    left: 75%;
 }
 
 /* VIEWS */

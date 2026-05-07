@@ -8,21 +8,18 @@
 
 require_once plugin_dir_path(__FILE__) . 'backend/config.php';
 require_once plugin_dir_path(__FILE__) . 'backend/auth.php';
+require_once plugin_dir_path(__FILE__) . 'backend/models/Category.php';
+require_once plugin_dir_path(__FILE__) . 'backend/models/TypeCategory.php';
 
-function render_dashboard()
-{
-  require_once plugin_dir_path(__FILE__) . 'frontend/views/dashboard.html.php';
-}
-
-// Connexion à la BdD
+// Hook d'activation du plugin
 register_activation_hook(__FILE__, 'vault_activate');
 
 // Creation des tables avec insertion des données
-function activate()
+function vault_activate()
 {
 
-  // on récupère la BdD depuis Config.php
-  $db = vault_get_db();
+  // on récupère la BdD depuis config.php
+  $db = get_db();
 
   // Destruction des tables si déjà existantes
 
@@ -80,7 +77,9 @@ DROP TABLE IF EXISTS Favorite, Propose, Assurance, Category, Type_Category, App_
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
     name_user VARCHAR(50) NOT NULL UNIQUE,
     email_user VARCHAR(50) NOT NULL,
-    password_user TEXT NOT NULL  -- bcrypt hash
+    password_user TEXT NOT NULL,  -- bcrypt hash
+    reset_token VARCHAR(64) NULL,
+    reset_token_expiry DATETIME NULL
 );";
   $db->exec($sql);
 
@@ -133,9 +132,9 @@ INSERT INTO App_User (is_admin, name_user, email_user, password_user) VALUES
 
 //lien pour accéder à la page depuis le site WP
 
-add_action('admin_menu', 'menu');
+add_action('admin_menu', 'vault_add_admin_menu');
 
-function menu()
+function vault_add_admin_menu()
 {
   add_menu_page(
     'Accès Assurances',      // balise <title>
@@ -147,4 +146,88 @@ function menu()
     6                        // position dans le menu
   );
 }
+
+// Fonction de rendu du dashboard
+function vault_render_dashboard()
+{
+  // Vérifier les permissions
+  if (!current_user_can('manage_options')) {
+    wp_die('Vous n\'avez pas les permissions nécessaires');
+  }
+
+  // Récupérer les catégories et types de catégories
+  $type_categories = get_all_types_category();
+  $categories = get_all_categories();
+
+  ?>
+  <div class="wrap">
+    <h1>Gestion des Comptes Assurances</h1>
+
+    <form method="POST" class="filter_assurance">
+      <input type="hidden" name="action" value="save_filter">
+
+      <table class="form-table">
+        <tr>
+          <th scope="row">
+            <label for="name">Nom de l'assurance</label>
+          </th>
+          <td>
+            <input type="text" id="name" name="name" placeholder="Entrez le nom">
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row">
+            <label for="favorite">Favori</label>
+          </th>
+          <td>
+            <input type="checkbox" id="favorite" name="favorite">
+          </td>
+        </tr>
+
+        <tr>
+          <th scope="row">
+            <label for="assurance_categories">Catégories</label>
+          </th>
+          <td>
+            <?php
+            if (!empty($type_categories)) {
+              foreach ($type_categories as $type) {
+                echo '<div style="margin-bottom: 15px;">';
+                echo '<strong>' . htmlspecialchars($type['name']) . '</strong><br>';
+
+                $has_categories = false;
+                foreach ($categories as $cat) {
+                  if ($cat['id_tc'] == $type['id']) {
+                    $has_categories = true;
+                    echo '<label style="display: block; margin: 5px 0;">';
+                    echo '<input type="checkbox" name="assurance_categories[]" value="' . htmlspecialchars($cat['id_c']) . '">';
+                    echo ' ' . htmlspecialchars($cat['name_c']);
+                    echo '</label>';
+                  }
+                }
+
+                if (!$has_categories) {
+                  echo '<em>Aucune catégorie</em>';
+                }
+
+                echo '</div>';
+              }
+            } else {
+              echo '<em>Aucun type de catégorie disponible</em>';
+            }
+            ?>
+          </td>
+        </tr>
+      </table>
+
+      <p class="submit">
+        <button type="submit" class="button button-primary">Rechercher</button>
+        <button type="reset" class="button">Réinitialiser</button>
+      </p>
+    </form>
+  </div>
+  <?php
+}
+
 ?>

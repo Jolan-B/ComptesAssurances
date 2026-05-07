@@ -27,7 +27,7 @@ function get_all_types_category($order_by_name = null, $order_by_nb_category = n
     $db = get_db();
     $sql = "SELECT T.id_type_category AS id, T.name_type_category AS name, COUNT(C.id_category) AS nb_category
     FROM `Type_Category` AS T
-    JOIN `Category` AS C ON C.type_category_id = T.id_type_category
+    LEFT JOIN `Category` AS C ON C.type_category_id = T.id_type_category
     GROUP BY T.id_type_category 
     ORDER BY $order1, $order2";
     $req = $db->query($sql);
