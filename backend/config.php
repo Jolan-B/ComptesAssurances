@@ -14,6 +14,9 @@ if ($env === false) {
 define('VAULT_AES_KEY', $env['VAULT_AES_KEY'] ?? '');
 define('VAULT_AES_IV', $env['VAULT_AES_IV'] ?? '');
 
+define('VAULT_DB_HOST', $env['DB_HOST_CUSTOM'] ?? '172.20.80.1');
+define('VAULT_DB_PORT', $env['DB_PORT'] ?? '3306');
+
 // Connexion à la base de données :
 
 function vault_check_required_fields($tab)
@@ -26,99 +29,25 @@ function vault_check_required_fields($tab)
     return true;
 }
 
+// Dans le terminal Local : 
+// mysql -u root local -e "SHOW VARIABLES LIKE 'port';"
+
 function get_db()
 {
-    // Utiliser la connexion WordPress existante
-    global $wpdb;
+    static $db = null;
 
-    // Retourner un objet qui imite l'interface PDO de notre code
-    // Pour compatibilité avec le code existant
-    static $db_wrapper = null;
+    if ($db === null) {
 
-    if ($db_wrapper === null) {
-        $db_wrapper = new class {
-            public function prepare($sql)
-            {
-                global $wpdb;
-                return new class ($sql) {
-                    private $sql;
-                    private $bindings = [];
+        $dsn = "mysql:dbname=" . DB_NAME . ";host=" . VAULT_DB_HOST . ";port=" . VAULT_DB_PORT . ";charset=utf8mb4";
+        try {
+            $db = new PDO($dsn, DB_USER, DB_PASSWORD);
+            $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            wp_die('Erreur de connexion : ' . $e->getMessage());
 
-                    public function __construct($sql)
-                    {
-                        $this->sql = $sql;
-                    }
-
-                    public function bindValue($param, $value)
-                    {
-                        $this->bindings[$param] = $value;
-                    }
-
-                    public function execute()
-                    {
-                        global $wpdb;
-                        $sql = $this->sql;
-                        foreach ($this->bindings as $param => $value) {
-                            $sql = str_replace($param, "'" . esc_sql($value) . "'", $sql);
-                        }
-                        return $wpdb->get_results($sql, ARRAY_A);
-                    }
-
-                    public function fetchAll()
-                    {
-                        return $this->execute();
-                    }
-
-                    public function fetch()
-                    {
-                        $results = $this->execute();
-                        return isset($results[0]) ? $results[0] : null;
-                    }
-
-                    public function fetchColumn()
-                    {
-                        $result = $this->fetch();
-                        if ($result && is_array($result)) {
-                            return array_shift($result);
-                        }
-                        return null;
-                    }
-                };
-            }
-
-            public function query($sql)
-            {
-                global $wpdb;
-                return new class ($sql) {
-                    private $sql;
-
-                    public function __construct($sql)
-                    {
-                        $this->sql = $sql;
-                    }
-
-                    public function fetchAll()
-                    {
-                        global $wpdb;
-                        return $wpdb->get_results($this->sql, ARRAY_A);
-                    }
-                };
-            }
-
-            public function lastInsertId()
-            {
-                global $wpdb;
-                return $wpdb->insert_id;
-            }
-
-            public function setAttribute($name, $value)
-            {
-                // WordPress gère cela automatiquement
-            }
-        };
+        }
     }
 
-    return $db_wrapper;
+    return $db;
 }
-
-return $db;

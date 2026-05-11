@@ -18,7 +18,7 @@
 
     <section class="profil_section">
 
-        <div class="profil_photo">
+        <div class="profil_photo pointer">
             <img src="<?= VAULT_URL . 'frontend/assets/images/account_circle_black.png' ?>" />
         </div>
 

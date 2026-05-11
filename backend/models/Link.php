@@ -1,7 +1,7 @@
 <?php
 
 // Récupérer tous les Liens
-function get_all_links()
+function vault_get_all_links()
 {
     $db = get_db();
 
@@ -13,7 +13,7 @@ function get_all_links()
 }
 
 // Récupérer un Lien depuis son ID
-function get_link($id_link)
+function vault_get_link($id_link)
 {
     $db = get_db();
 
@@ -27,7 +27,7 @@ function get_link($id_link)
 }
 
 // Ajouter un Lien
-function add_link($name, $url, $username = null, $password = null, $commentaire = null, $image = null)
+function vault_add_link($name, $url, $username = null, $password = null, $commentaire = null, $image = null)
 {
     $db = get_db();
 
@@ -46,7 +46,7 @@ function add_link($name, $url, $username = null, $password = null, $commentaire 
 }
 
 // Modifier un Lien
-function edit_link($id, $name, $url, $username, $password, $commentaire, $image)
+function vault_edit_link($id, $name, $url, $username, $password, $commentaire, $image)
 {
     $db = get_db();
 
@@ -68,7 +68,7 @@ function edit_link($id, $name, $url, $username, $password, $commentaire, $image)
 }
 
 // Supprimer un Lien
-function delete_link($id)
+function vault_delete_link($id)
 {
     $db = get_db();
 

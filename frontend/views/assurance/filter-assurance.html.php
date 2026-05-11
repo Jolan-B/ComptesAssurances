@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Comptes</title>
+
     <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/style.css' ?>">
+    <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/assurance.css' ?>">
+    <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/components.css' ?>">
+
     <link rel="icon" type="image/svg+xml" href="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>" />
 </head>
 
@@ -13,7 +17,7 @@
 
     <!-- 
     Dans le terminal WSL : php -S localhost:8000
-    puis dans le navigateur : http://localhost:8000/frontend/views/assurance/filter-assurance.php
+    puis dans le navigateur : http://localhost:8000/frontend/views/assurance/filter-assurance.html.php
     -->
 
     <?php include_once VAULT_PATH . 'frontend/components/navigation-bar.html.php'; ?>
@@ -34,24 +38,33 @@
                 <label for="favorite">Favori</label>
             </div>
 
+            <label for="assurance_categories">Catégorie proposé</label>
+
             <div class="filter_assurance_categories">
 
-                <label for="assurance_categories">Catégorie proposé</label>
+                <?php
+                $type_categories = vault_get_all_types_category();
+                $categories = vault_get_all_categories();
 
+                foreach ($type_categories as $type) {
 
-                <div>
-                    <?php
-                    foreach ($type_categories as $type) {
-                        echo '<span class="title_filter_assurance_category">' . htmlspecialchars($type['name']) . '</span>';
-                        foreach ($categories as $category) {
-                            if ($category['id_tc'] == $type['id']) {
-                                echo '<input type="checkbox" name="assurance_categories[]" value="' . htmlspecialchars($category['id_c']) . '">';
-                                echo '<span>' . htmlspecialchars($category['name_c']) . '</span>';
-                            }
+                    if ($type_categories[0] != $type) {
+                        echo '<br/>';
+                    }
+
+                    echo "<span class=\"type_category\">{$type['name']}<span>";
+                    echo '<br/><br/>';
+
+                    foreach ($categories as $category) {
+
+                        if ($category['id_tc'] == $type['id']) {
+                            echo "<input type='checkbox' id='assurance_categories' name='categories' value={$category['id']} >";
+                            echo "<span class=\"category\"> {$category['name_c']}<span>";
+                            echo '<br/>';
                         }
                     }
-                    ?>
-                </div>
+                }
+                ?>
 
             </div>
 
@@ -73,6 +86,8 @@
 
         <section class="list_assurance_link">
 
+            <!-- LISTE DES LIENS -->
+
             <div class="list_assurance_title_button">
 
                 <span>Liste des Liens</span>
@@ -82,8 +97,19 @@
                 $type_add_button = "button";
                 include VAULT_PATH . 'frontend/components/add-button.html.php';
                 ?>
-
             </div>
+
+
+            <?php
+            $links = vault_get_all_links();
+            var_dump($links);
+            ?>
+
+            <div>
+                <img href="" />
+            </div>
+
+            <!-- LISTE DES ASSURANCES -->
 
             <div class="list_assurance_title_button">
 

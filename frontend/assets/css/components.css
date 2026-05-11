@@ -1,0 +1,125 @@
+/* COMPONENTS */
+
+/* Add Button */
+
+.add_button {
+    width: fit-content;
+    padding: 10px 20px;
+    border-radius: 12px;
+
+    border: none;
+
+    align-self: center;
+    text-align: center;
+    font-weight: bold;
+
+    /* box-shadow:
+        inset 2px 2px 3px rgb(255 255 255 / 0.6),
+        inset -2px -2px 3px rgb(0 0 0 / 0.6); */
+
+    background-color: var(--color_gold);
+}
+
+.add_button:hover {
+    color: white;
+    background-color: var(--color_gold_hover);
+    transition: var(--transition_fast);
+}
+
+/* Red Button */
+
+.red_button {
+    background-color: var(--color_grey_hover);
+    border-radius: 12px;
+    font-weight: bold;
+    border: none;
+    color: white;
+}
+
+.red_button:hover {
+    background-color: red;
+    transition: var(--transition_fast);
+}
+
+/* Navigation Bar */
+
+.navigation_bar {
+    height: var(--nav_bar_width);
+    background-color: var(--color_grey);
+    font-weight: bold;
+    width: 100%;
+}
+
+.menu_buttons {
+    width: calc(100% - var(--nav_bar_width));
+
+    height: 100%;
+
+    display: flex;
+    justify-content: space-around;
+}
+
+.menu_button {
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    font-size: 1.2em;
+
+    padding: 0 20px;
+}
+
+.menu_button:hover {
+    border-bottom: 2px solid black;
+    transition: var(--transition_very_fast);
+}
+
+.profil_section {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.profil_photo {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+.profil_photo>img {
+    width: var(--nav_bar_width);
+    object-fit: contain;
+}
+
+.profil_option {
+    font-size: 0;
+}
+
+.profil_section:hover {
+
+    .profil_option {
+        background-color: var(--color_grey);
+        padding: 10px;
+        font-size: 1em;
+    }
+
+    .profil_option>div {
+        margin-right: 0.3em;
+    }
+
+    .profil_option:hover {
+
+        background-color: var(--color_grey_hover);
+
+        div {
+            margin-right: 0;
+            margin-left: 0.3em;
+            transition: var(--transition_fast);
+        }
+
+        transition: var(--transition_fast);
+    }
+}
+
+/* COMPONENTS */

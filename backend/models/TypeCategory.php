@@ -8,7 +8,7 @@ define('ORDER_BY_NB_CATEGORY_DESC', '`nb_category` DESC');
 
 // Récupérer les Types de Catégories
 // Trie en fonction des parametres
-function get_all_types_category($order_by_name = null, $order_by_nb_category = null)
+function vault_get_all_types_category($order_by_name = null, $order_by_nb_category = null)
 {
     $order1 = ORDER_BY_NAME_TYPE_CATEGORY_ASC;
     $order2 = ORDER_BY_NB_CATEGORY_ASC;
@@ -51,7 +51,7 @@ function vault_get_type_category($id)
 }
 
 // Ajouter un Type de Catégorie
-function add_type_category($name)
+function vault_add_type_category($name)
 {
     $db = get_db();
 
@@ -63,7 +63,7 @@ function add_type_category($name)
 }
 
 // Modifier un Type de Catégorie
-function edit_type_category($id, $name)
+function vault_edit_type_category($id, $name)
 {
     $db = get_db();
 
@@ -77,7 +77,7 @@ function edit_type_category($id, $name)
 }
 
 // Supprimer un Type de Catégorie
-function delete_type_category($id)
+function vault_delete_type_category($id)
 {
     $db = get_db();
 

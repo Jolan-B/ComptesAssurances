@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réinitialisation du mot de passe</title>
+
+    <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/style.css' ?>">
     <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/login.css' ?>">
+    <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/components.css' ?>">
+
     <link rel="icon" type="image/svg+xml" href="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>" />
 </head>
 

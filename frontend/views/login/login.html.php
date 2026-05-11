@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
+
+    <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/style.css' ?>">
     <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/login.css' ?>">
+    <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/components.css' ?>">
+
     <link rel="icon" type="image/svg+xml" href="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>" />
 </head>
 
@@ -20,7 +24,7 @@
                 <span>Authentification</span>
             </div>
 
-            <form action="<?= home_url('/?vault=login') ?>" method="post">
+            <form action="<?= home_url('/?vault=login') ?>" method=" post">
 
                 <div>
                     <label for="username">Nom utilisateur</label>
