@@ -4,7 +4,7 @@
 
 
 // Ajouter un id de la catégorie dans la table Propose
-function add_propose($id_assurance, $id_categories)
+function vault_add_propose($id_assurance, $id_categories)
 {
     $db = get_db();
 
@@ -19,7 +19,7 @@ function add_propose($id_assurance, $id_categories)
 }
 
 // Supprimer les entités Propose associées à la table Assurance
-function delete_propose($id_assurance)
+function vault_delete_propose($id_assurance)
 {
     $db = get_db();
 
@@ -35,13 +35,13 @@ function delete_propose($id_assurance)
 
 
 // Récupérer toutes les Assurances
-function get_all_assurances()
+function vault_get_all_assurances()
 {
     $id_user = $_SESSION["id_user"] ?? null;
 
     $db = get_db();
 
-    $sql = "SELECT `id_assurance`, `name_assurance`, `image_assurance`, F.assurance_id IS NOT NULL AS is_favorite
+    $sql = "SELECT `id_assurance` AS id, `url_assurance` AS url, `name_assurance` AS name, `image_assurance` AS image, F.assurance_id IS NOT NULL AS is_favorite
     FROM `Assurance` AS A
     LEFT JOIN `Favorite` AS F ON F.assurance_id = A.id_assurance AND F.user_id = :id_u
     ORDER BY F.assurance_id IS NOT NULL ASC, `name_assurance` ASC";
@@ -52,7 +52,7 @@ function get_all_assurances()
 }
 
 // Récupérer une Assurance
-function get_assurance($id_assurance)
+function vault_get_assurance($id_assurance)
 {
     $id_user = $_SESSION["id_user"] ?? null;
 
@@ -72,7 +72,7 @@ function get_assurance($id_assurance)
 }
 
 // Ajouter une Assurance
-function add_assurance($name, $url, $username, $pwd, $commentary, $categories, $code_courtage = null, $image = null)
+function vault_add_assurance($name, $url, $username, $pwd, $commentary, $categories, $code_courtage = null, $image = null)
 {
     $db = get_db();
 
@@ -93,12 +93,12 @@ function add_assurance($name, $url, $username, $pwd, $commentary, $categories, $
     // Récupère l'id de l'Assurance qui vient d'être créée pour l'ajouter dans la table Propose
     $id = $db->lastInsertId();
 
-    add_propose($id, $categories);
+    vault_add_propose($id, $categories);
 
 }
 
 // Modifier une Assurance
-function edit_assurance($id, $name, $url, $username, $pwd, $commentary, $categories, $code_courtage = null, $image = null)
+function vault_edit_assurance($id, $name, $url, $username, $pwd, $commentary, $categories, $code_courtage = null, $image = null)
 {
     $db = get_db();
 
@@ -118,12 +118,12 @@ function edit_assurance($id, $name, $url, $username, $pwd, $commentary, $categor
     $req->bindValue(":image", $image);
     $req->execute();
 
-    delete_propose($id);
-    add_propose($id, $categories);
+    vault_delete_propose($id);
+    vault_add_propose($id, $categories);
 }
 
 // Supprimer une Assurance
-function delete_assurance($id)
+function vault_delete_assurance($id)
 {
     $db = get_db();
 
@@ -135,7 +135,7 @@ WHERE `id_assurance` = :id";
 }
 
 // Mettre / enlever le favori d'une Assurance
-function change_favorite_assurance($id_assurance)
+function vault_change_favorite_assurance($id_assurance)
 {
     $id_user = $_SESSION["id_user"] ?? null;
 
@@ -168,7 +168,7 @@ function change_favorite_assurance($id_assurance)
 }
 
 // Sauvegarder le filtre en session
-function save_filter_assurance($name, $is_favorite, $categories)
+function vault_save_filter_assurance($name, $is_favorite, $categories)
 {
     $_SESSION['filter_name'] = $name;
     $_SESSION['filter_is_favorite'] = $is_favorite;
@@ -176,7 +176,7 @@ function save_filter_assurance($name, $is_favorite, $categories)
 }
 
 // Filtrer les Assurances
-function filter_assurance()
+function vault_filter_assurance()
 {
     $id_user = $_SESSION["id_user"] ?? null;
     $name = $_SESSION['filter_name'] ?? null;
@@ -223,16 +223,16 @@ function filter_assurance()
 }
 
 // Réinitialiser le filtre des Assurances
-function reset_filter_assurance()
+function vault_reset_filter_assurance()
 {
     $_SESSION['filter_name'] = null;
     $_SESSION['filter_is_favorite'] = null;
     $_SESSION['filter_categories'] = null;
-    return get_all_assurances();
+    return vault_get_all_assurances();
 }
 
 // Exporter les Assurances en CSV
-function export_assurances_to_csv()
+function vault_export_assurances_to_csv()
 {
     $db = get_db();
 

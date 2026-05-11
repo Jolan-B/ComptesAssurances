@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/assurance.css' ?>">
     <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/components.css' ?>">
 
+    <script type="text/javascript" src="<?= VAULT_URL . 'frontend/assets/js/script.js' ?>"></script>
+
     <link rel="icon" type="image/svg+xml" href="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>" />
 </head>
 
@@ -101,14 +103,16 @@
 
 
             <?php
+            include_once VAULT_PATH . 'backend/models/Link.php';
             $links = vault_get_all_links();
-            var_dump($links);
+
+            if ($links == null) {
+                ?>
+                <span>Pas de liens pour le moment</span>
+                <?php
+            } else {
+            }
             ?>
-
-            <div>
-                <img href="" />
-            </div>
-
             <!-- LISTE DES ASSURANCES -->
 
             <div class="list_assurance_title_button">
@@ -120,6 +124,24 @@
                 $type_add_button = "button";
                 include VAULT_PATH . 'frontend/components/add-button.html.php';
                 ?>
+            </div>
+
+            <div class="list_image">
+
+                <?php
+                $assurances = vault_get_all_assurances();
+
+                foreach ($assurances as $assurance) {
+
+                    // si il n'y a pas d'image de base
+                    if ($assurance['image'] == null || $assurance['image'] == '') {
+                        $assurance['image'] = "default.png";
+                    }
+
+                    include VAULT_PATH . '/frontend/components/bloc_assurance.php';
+                }
+                ?>
+
             </div>
 
         </section>

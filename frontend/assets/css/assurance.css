@@ -43,14 +43,12 @@
 }
 
 .list_assurance_link {
-    display: flex;
-    flex-direction: column;
     width: calc(100% - var(--filter_assurance_width));
+    height: calc(100vh - var(--nav_bar_width));
+    overflow-y: scroll;
 }
 
 .list_assurance_title_button {
-
-    background-color: red;
 
     display: flex;
     justify-content: space-between;
@@ -60,4 +58,16 @@
 
     font-weight: bold;
     font-size: 1.2em;
+}
+
+.list_image {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    justify-content: space-between;
+
+    padding: 10px;
+
+    gap: 10px;
 }

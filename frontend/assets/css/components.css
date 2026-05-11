@@ -1,3 +1,7 @@
+body {
+    --logo_assurance_width: 140px;
+}
+
 /* COMPONENTS */
 
 /* Add Button */
@@ -120,6 +124,79 @@
 
         transition: var(--transition_fast);
     }
+}
+
+/* Bloc Assurance / Link */
+
+.bloc_assurance_link {
+    display: flex;
+}
+
+.bloc_assurance_link:hover {
+
+    .logo_assurance_link {
+        opacity: 1;
+        transition: var(--transition_fast);
+    }
+
+    .buttons_edit_delete img {
+        height: 20px;
+        transition: var(--transition_fast);
+    }
+}
+
+.logo_name_assurance_link {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo_name_assurance_link span {
+    font-size: var(--label_font_size);
+    font-weight: bold;
+    text-align: center;
+}
+
+.logo_assurance_link {
+    height: var(--logo_image_width);
+    width: var(--logo_assurance_width);
+
+    object-fit: fill;
+
+    opacity: 0.85;
+}
+
+.is_favorite {
+    position: relative;
+    right: var(--logo_assurance_width);
+    height: fit-content;
+}
+
+.is_favorite img {
+    width: 20px;
+}
+
+.is_favorite :hover {
+    background-color: var(--color_grey);
+}
+
+.buttons_edit_delete {
+    position: relative;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+
+    width: 0;
+}
+
+.buttons_edit_delete img {
+    width: 20px;
+    height: 0;
+    background-color: var(--color_grey);
+}
+
+.buttons_edit_delete img:hover {
+    background-color: var(--color_grey_hover);
 }
 
 /* COMPONENTS */
