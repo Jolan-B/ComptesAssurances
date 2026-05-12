@@ -1,8 +1,11 @@
-body {
-    --logo_assurance_width: 140px;
-}
-
 /* COMPONENTS */
+
+a {
+    color: black;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+}
 
 /* Add Button */
 
@@ -48,14 +51,14 @@ body {
 /* Navigation Bar */
 
 .navigation_bar {
-    height: var(--nav_bar_width);
+    height: var(--nav_bar_height);
     background-color: var(--color_grey);
     font-weight: bold;
     width: 100%;
 }
 
 .menu_buttons {
-    width: calc(100% - var(--nav_bar_width));
+    width: calc(100% - var(--nav_bar_height));
 
     height: 100%;
 
@@ -69,7 +72,7 @@ body {
     align-items: center;
     text-align: center;
 
-    font-size: 1.2em;
+    font-size: var(--menu_font_size);
 
     padding: 0 20px;
 }
@@ -92,20 +95,21 @@ body {
 }
 
 .profil_photo>img {
-    width: var(--nav_bar_width);
+    width: var(--nav_bar_height);
     object-fit: contain;
 }
 
 .profil_option {
-    font-size: 0;
+    background-color: var(--color_grey);
+    padding: 10px;
+    font-size: 1em;
+    display: none;
 }
 
 .profil_section:hover {
 
     .profil_option {
-        background-color: var(--color_grey);
-        padding: 10px;
-        font-size: 1em;
+        display: block;
     }
 
     .profil_option>div {
@@ -116,7 +120,8 @@ body {
 
         background-color: var(--color_grey_hover);
 
-        div {
+        div,
+        a {
             margin-right: 0;
             margin-left: 0.3em;
             transition: var(--transition_fast);
@@ -124,6 +129,47 @@ body {
 
         transition: var(--transition_fast);
     }
+}
+
+/* Edit Add Bar */
+
+.add_edit_bar {
+
+    position: fixed;
+    width: calc(100% - 40px);
+
+    display: flex;
+    justify-content: space-between;
+    padding-right: 40px;
+    height: var(--nav_bar_height);
+    background-color: var(--color_grey);
+}
+
+.menu_buttons_add_edit {
+    height: 100%;
+    display: flex;
+
+    align-items: center;
+
+    font-size: var(--menu_font_size);
+    font-weight: bold;
+}
+
+.menu_buttons_add_edit a {
+    height: calc(var(--nav_bar_height) - 10px);
+    margin-left: 40px;
+    margin-right: 15vw;
+}
+
+.menu_buttons_add_edit a:hover {
+    margin-left: 35px;
+    margin-right: calc(15vw + 5px);
+
+    transition: var(--transition_fast);
+}
+
+.menu_buttons_add_edit img {
+    height: 100%;
 }
 
 /* Bloc Assurance / Link */
@@ -139,8 +185,8 @@ body {
         transition: var(--transition_fast);
     }
 
-    .buttons_edit_delete img {
-        height: 20px;
+    .buttons_edit_delete a img {
+        height: var(--edit_delete_button_width);
         transition: var(--transition_fast);
     }
 }
@@ -157,7 +203,7 @@ body {
 }
 
 .logo_assurance_link {
-    height: var(--logo_image_width);
+    height: var(--logo_assurance_width);
     width: var(--logo_assurance_width);
 
     object-fit: fill;
@@ -171,28 +217,47 @@ body {
     height: fit-content;
 }
 
+.is_favorite button {
+    border: none;
+    background: none;
+
+    width: 0;
+
+    margin: 0;
+    padding: 0;
+}
+
 .is_favorite img {
-    width: 20px;
+    width: var(--favorite_button_width);
 }
 
 .is_favorite :hover {
-    background-color: var(--color_grey);
+    img {
+        background-color: var(--color_grey);
+    }
 }
 
 .buttons_edit_delete {
     position: relative;
-    right: 20px;
+    right: var(--edit_delete_button_width);
     display: flex;
     flex-direction: column;
-    height: fit-content;
 
+    height: fit-content;
     width: 0;
 }
 
+.buttons_edit_delete a {
+    display: block;
+    line-height: 0;
+    font-size: 0;
+}
+
 .buttons_edit_delete img {
-    width: 20px;
+    width: var(--edit_delete_button_width);
     height: 0;
     background-color: var(--color_grey);
+    margin: 0;
 }
 
 .buttons_edit_delete img:hover {

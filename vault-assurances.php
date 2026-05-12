@@ -20,6 +20,7 @@ require_once VAULT_PATH . 'backend/models/Category.php';
 require_once VAULT_PATH . 'backend/models/TypeCategory.php';
 require_once VAULT_PATH . 'backend/models/Assurance.php';
 require_once VAULT_PATH . 'backend/models/User.php';
+require_once VAULT_PATH . 'backend/models/Link.php';
 
 // Activation
 register_activation_hook(__FILE__, 'vault_activate');
@@ -181,12 +182,18 @@ function vault_router()
 
   switch ($page) {
 
+    // LOGIN
+
     case 'login':
       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         require_once VAULT_PATH . 'backend/controllers/LoginCtrl.php';
       } else {
         require_once VAULT_PATH . 'frontend/views/login/login.html.php';
       }
+      exit;
+
+    case 'logout':
+      require_once VAULT_PATH . 'backend/controllers/LogoutCtrl.php';
       exit;
 
     case 'forgot-password':
@@ -205,20 +212,45 @@ function vault_router()
       require_once VAULT_PATH . 'backend/controllers/ResetPasswordCtrl.php';
       exit;
 
+    // ASSURANCE
+
     case 'dashboard':
-      vault_check_auth(); // vérifier la session avant
+      vault_check_auth();
+      require_once VAULT_PATH . 'backend/controllers/DashboardCtrl.php';
+      exit;
+
+    case 'change-favorite':
+      vault_check_auth();
+      vault_change_favorite_assurance($_POST['id_assurance']);
       require_once VAULT_PATH . 'frontend/views/assurance/filter-assurance.html.php';
       exit;
+
+    case 'edit-assurance':
+      vault_check_auth();
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        require_once VAULT_PATH . 'backend/controllers/FormCtrl.php';
+      } else {
+        $id = intval($_GET['id'] ?? 0);
+        require_once VAULT_PATH . 'frontend/views/assurance/edit-assurance.html.php';
+      }
+      exit;
+
+
+    // CATEGORY
 
     case 'category-management':
       vault_check_auth(); // vérifier la session avant
       require_once VAULT_PATH . 'frontend/views/category/show-category.html.php';
       exit;
 
+    // TYPE CATEGORY
+
     case 'type-category-management':
       vault_check_auth(); // vérifier la session avant
       require_once VAULT_PATH . 'frontend/views/type_category/show-type-category.html.php';
       exit;
+
+    // USER
 
     case 'user-management':
       vault_check_auth(); // vérifier la session avant

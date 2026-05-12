@@ -16,9 +16,20 @@ body {
 
     /* TAILLE */
 
-    --nav_bar_width: 60px;
+    /* Components */
+
+    --nav_bar_height: 60px;
+    --menu_font_size: 1.4em;
+
+    /* Bloc Assurance */
+
+    --logo_assurance_width: 150px;
+    --favorite_button_width: 30px;
+    --edit_delete_button_width: 30px;
 
     --filter_assurance_width: 250px;
+
+
 
     --label_font_size: 1.1em;
 }

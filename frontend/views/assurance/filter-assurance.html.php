@@ -45,12 +45,12 @@
             <div class="filter_assurance_categories">
 
                 <?php
-                $type_categories = vault_get_all_types_category();
+                $types_category = vault_get_all_types_category();
                 $categories = vault_get_all_categories();
 
-                foreach ($type_categories as $type) {
+                foreach ($types_category as $type) {
 
-                    if ($type_categories[0] != $type) {
+                    if ($types_category[0] != $type) {
                         echo '<br/>';
                     }
 
@@ -138,7 +138,7 @@
                         $assurance['image'] = "default.png";
                     }
 
-                    include VAULT_PATH . '/frontend/components/bloc_assurance.php';
+                    include VAULT_PATH . '/frontend/components/bloc-assurance.html.php';
                 }
                 ?>
 

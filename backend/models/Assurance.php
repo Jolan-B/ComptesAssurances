@@ -44,7 +44,7 @@ function vault_get_all_assurances()
     $sql = "SELECT `id_assurance` AS id, `url_assurance` AS url, `name_assurance` AS name, `image_assurance` AS image, F.assurance_id IS NOT NULL AS is_favorite
     FROM `Assurance` AS A
     LEFT JOIN `Favorite` AS F ON F.assurance_id = A.id_assurance AND F.user_id = :id_u
-    ORDER BY F.assurance_id IS NOT NULL ASC, `name_assurance` ASC";
+    ORDER BY F.assurance_id IS NOT NULL DESC, `name_assurance` ASC";
     $req = $db->prepare($sql);
     $req->bindValue(":id_u", $id_user);
     $req->execute();
@@ -58,17 +58,26 @@ function vault_get_assurance($id_assurance)
 
     $db = get_db();
 
-    $sql = "SELECT `id_assurance`, `name_assurance`, `url_assurance`,`username_assurance`,`password_assurance`,`code_courtage_assurance`,`commentary_assurance`,`image_assurance`, F.assurance_id IS NOT NULL AS is_favorite, P.category_id
+    $sql = "SELECT `id_assurance` AS id, `name_assurance` AS name, `url_assurance` AS url,`username_assurance` AS username,`password_assurance` AS pwd,`code_courtage_assurance` AS cc,`commentary_assurance` AS commentary,`image_assurance` AS image, F.assurance_id IS NOT NULL AS is_favorite
     FROM `Assurance` AS A
-    LEFT JOIN `Propose` AS P ON P.assurance_id = A.id_assurance
     LEFT JOIN `Favorite` AS F ON F.assurance_id = A.id_assurance AND F.user_id = :id_u
-    WHERE `id_assurance` = :id_a
-    GROUP BY  `id_assurance`";
+    WHERE `id_assurance` = :id_a";
     $req = $db->prepare($sql);
     $req->bindValue(":id_a", $id_assurance);
     $req->bindValue(":id_u", $id_user);
     $req->execute();
-    return $req->fetch();
+    $assurance = $req->fetch();
+
+    $sql = "SELECT `category_id` AS id
+    FROM `Propose`
+    WHERE `assurance_id`= :id_a";
+    $req = $db->prepare($sql);
+    $req->bindValue(":id_a", $id_assurance);
+    $req->execute();
+
+    $assurance['categories'] = $req->fetchAll();
+
+    return $assurance;
 }
 
 // Ajouter une Assurance
@@ -150,7 +159,7 @@ function vault_change_favorite_assurance($id_assurance)
     $req->bindValue(":id_a", $id_assurance);
     $req->execute();
 
-    $is_favorite = ($req->fetch() == $id_user);
+    $is_favorite = ($req->fetch() !== false);
 
     // Si l'Assurance est déjà en favori, on la supprime de la table Favorite, sinon on l'ajoute
     if ($is_favorite) {

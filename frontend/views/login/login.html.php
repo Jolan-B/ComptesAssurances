@@ -24,7 +24,7 @@
                 <span>Authentification</span>
             </div>
 
-            <form action="<?= home_url('/?vault=login') ?>" method=" post">
+            <form action="<?= home_url('/?vault=login') ?>" method="POST">
 
                 <div>
                     <label for="username">Nom utilisateur</label>

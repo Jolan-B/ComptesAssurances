@@ -2,17 +2,18 @@
 
     <section class="menu_buttons">
 
-        <div class="menu_button pointer">
-            <span>Compte</span>
-        </div>
+        <a class="menu_button pointer" href="<?= home_url('/?vault=dashboard') ?>">
+            <span>Assurance</span>
+        </a>
 
-        <div class="menu_button pointer">
+        <a class="menu_button pointer" href="<?= home_url('/?vault=category-management') ?>">
             <span>Service</span>
-        </div>
+        </a>
 
-        <div class="menu_button pointer">
+        <a class="menu_button pointer" href="<?= home_url('/?vault=type-category-management') ?>">
             <span>Type de service</span>
-        </div>
+        </a>
+
 
     </section>
 
@@ -22,25 +23,26 @@
             <img src="<?= VAULT_URL . 'frontend/assets/images/account_circle_black.png' ?>" />
         </div>
 
-        <div class="profil_option pointer">
+        <a class="profil_option pointer" href="<?= home_url("/?vault=") ?>">
             <div>
                 <span>Mon Compte</span>
             </div>
-        </div>
+        </a>
 
         <!-- LE BOUTON DOIT APPARAITRE POUR L'ADMIN UNIQUEMENT -->
 
-        <div class="profil_option pointer">
+        <a class="profil_option pointer" href="<?= home_url("/?vault=") ?>">
             <div>
                 <span>Gérer les utilisateurs</span>
             </div>
-        </div>
+        </a>
 
-        <div class="profil_option pointer">
+        <a class="profil_option pointer" href="<?= home_url('/?vault=logout') ?>">
             <div>
                 <span>Déconnexion</span>
             </div>
-        </div>
+        </a>
+
 
     </section>
 

@@ -1,3 +1,73 @@
+/* Edit Assurance */
+
+.form_edit_assurance {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 50px;
+
+    padding: calc(30px + var(--nav_bar_height)) 0px;
+}
+
+.form_edit_assurance label {
+    font-weight: bold;
+    font-size: var(--label_font_size);
+}
+
+.edit_assurance_data {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.edit_assurance_category_data {}
+
+.left_edit,
+.right_edit {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    gap: 50px;
+    width: 40vw;
+}
+
+.left_edit label,
+.right_edit label {
+    margin-bottom: 10px;
+}
+
+.edit_logo {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+
+}
+
+.edit_logo input {
+    width: var(--logo_assurance_width);
+}
+
+.edit_logo img {
+    height: calc(var(--logo_assurance_width) / 3);
+}
+
+.edit_logo div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.bloc_edit_assurance {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+
+.bloc_edit_assurance label {
+    text-indent: 5px;
+}
+
 /* Filter-Assurance */
 
 .list_assurance_link_page {
@@ -11,7 +81,7 @@
     justify-content: space-between;
 
     width: fit-content;
-    height: calc(100vh - var(--nav_bar_width) - 10px);
+    height: calc(100vh - var(--nav_bar_height) - 10px);
     width: var(--filter_assurance_width);
     padding: 5px 10px;
 
@@ -44,7 +114,7 @@
 
 .list_assurance_link {
     width: calc(100% - var(--filter_assurance_width));
-    height: calc(100vh - var(--nav_bar_width));
+    height: calc(100vh - var(--nav_bar_height));
     overflow-y: scroll;
 }
 
