@@ -20,7 +20,7 @@
         <section class="bloc_login">
 
             <div>
-                <img src="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>">
+                <img class="logo_sily_login" src="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>">
                 <span>Mot de Passe</span>
             </div>
 

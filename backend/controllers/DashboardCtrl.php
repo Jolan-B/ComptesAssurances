@@ -7,7 +7,7 @@ vault_check_auth();
 $assurances = vault_filter_assurance();
 
 // Récupère les types de catégories pour le filtre
-$type_categories = vault_get_all_types_category();
+$types_category = vault_get_all_types_category();
 
 // Récupère les catégories pour le filtre
 $categories = vault_get_all_categories();

@@ -68,6 +68,8 @@ function vault_get_assurance($id_assurance)
     $req->execute();
     $assurance = $req->fetch();
 
+    $assurance["pwd"] = openssl_decrypt($assurance['pwd'], 'AES-256-CBC', VAULT_AES_KEY, 0, VAULT_AES_IV);
+
     $sql = "SELECT `category_id` AS id
     FROM `Propose`
     WHERE `assurance_id`= :id_a";
@@ -102,8 +104,9 @@ function vault_add_assurance($name, $url, $username, $pwd, $commentary, $categor
     // Récupère l'id de l'Assurance qui vient d'être créée pour l'ajouter dans la table Propose
     $id = $db->lastInsertId();
 
-    vault_add_propose($id, $categories);
+    echo $categories;
 
+    vault_add_propose($id, $categories);
 }
 
 // Modifier une Assurance
@@ -128,7 +131,10 @@ function vault_edit_assurance($id, $name, $url, $username, $pwd, $commentary, $c
     $req->execute();
 
     vault_delete_propose($id);
+
     vault_add_propose($id, $categories);
+
+
 }
 
 // Supprimer une Assurance
@@ -193,7 +199,7 @@ function vault_filter_assurance()
     $categories = $_SESSION['filter_categories'] ?? null;
 
     $db = get_db();
-    $sql = "SELECT `id_assurance`, `name_assurance`, `image_assurance`, F.assurance_id IS NOT NULL AS is_favorite
+    $sql = "SELECT `id_assurance` AS id, `url_assurance` AS url, `username_assurance` AS username, `password_assurance` AS pwd, `code_courtage_assurance` AS cc, `name_assurance` AS name, `image_assurance` AS image, F.assurance_id IS NOT NULL AS is_favorite
     FROM `Assurance` AS A
     LEFT JOIN `Propose` AS P ON P.assurance_id=A.id_assurance
     LEFT JOIN `Favorite` AS F ON F.assurance_id=A.id_assurance AND F.user_id=:id_u
@@ -202,10 +208,10 @@ function vault_filter_assurance()
     if ($name !== null && $name !== "") {
         $sql .= " AND `name_assurance` LIKE :name";
     }
-    if ($favorite !== null) {
-        $sql .= " AND `is_favorite` = :favorite";
+    if ($favorite == 1) {
+        $sql .= " AND (F.assurance_id IS NOT NULL) = 1";
     }
-    if ($categories !== null) {
+    if (!empty($categories)) {
         $sql .= " AND (";
         foreach ($categories as $i => $category) {
             $sql .= ($i === 0 ? "" : " OR") . " P.category_id = :category_$i";
@@ -213,16 +219,13 @@ function vault_filter_assurance()
         $sql .= ")";
     }
 
-    $sql .= " ORDER BY F.assurance_id IS NOT NULL ASC, `name_assurance` ASC";
+    $sql .= " ORDER BY F.assurance_id IS NOT NULL DESC, `name_assurance` ASC";
     $req = $db->prepare($sql);
     $req->bindValue(":id_u", $id_user);
     if ($name !== null && $name !== "") {
         $req->bindValue(":name", "%$name%");
     }
-    if ($favorite !== null) {
-        $req->bindValue(":favorite", $favorite);
-    }
-    if ($categories !== null) {
+    if (!empty($categories)) {
         foreach ($categories as $i => $category) {
             $req->bindValue(":category_$i", $category);
         }

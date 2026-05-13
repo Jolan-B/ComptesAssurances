@@ -8,31 +8,32 @@ if ($action == null || !vault_is_admin()) {
     exit;
 }
 
+
 switch ($action) {
 
-    case 'delete_assurance':
-        if (pvault_check_required_fields([$_POST['id_assurance'] ?? null])) {
+    case 'delete-assurance':
+        if (vault_check_required_fields([$_POST['id_assurance'] ?? null])) {
 
             $id = intval(strip_tags($_POST['id_assurance']));
 
-            delete_assurance($id);
+            vault_delete_assurance($id);
             wp_redirect(home_url('/?vault=dashboard'));
             exit;
         }
         break;
 
-    case 'delete_link':
-        if (pvault_check_required_fields([$_POST['id_link'] ?? null])) {
+    case 'delete-link':
+        if (vault_check_required_fields([$_POST['id_link'] ?? null])) {
 
             $id = intval(strip_tags($_POST['id_link']));
 
-            delete_link($id);
+            vault_delete_link($id);
             wp_redirect(home_url('/?vault=dashboard'));
             exit;
         }
         break;
 
-    case 'delete_user':
+    case 'delete-user':
         if (vault_check_required_fields([$_POST['id_user'] ?? null])) {
 
             $id = intval(strip_tags($_POST['id_user']));
@@ -43,23 +44,23 @@ switch ($action) {
         }
         break;
 
-    case 'delete_category':
-        if (pvault_check_required_fields([$_POST['id_category'] ?? null])) {
+    case 'delete-category':
+        if (vault_check_required_fields([$_POST['id_category'] ?? null])) {
 
             $id = intval(strip_tags($_POST['id_category']));
 
-            delete_category($id);
+            vault_delete_category($id);
             wp_redirect(home_url('/?vault=category-management'));
             exit;
         }
         break;
 
-    case 'delete_type_category':
-        if (pvault_check_required_fields([$_POST['id_type_category'] ?? null])) {
+    case 'delete-type-category':
+        if (vault_check_required_fields([$_POST['id_type_category'] ?? null])) {
 
             $id = intval(strip_tags($_POST['id_type_category']));
 
-            delete_type_category($id);
+            vault_delete_type_category($id);
             wp_redirect(home_url('/?vault=type-category-management'));
             exit;
         }

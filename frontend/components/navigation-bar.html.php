@@ -23,7 +23,7 @@
             <img src="<?= VAULT_URL . 'frontend/assets/images/account_circle_black.png' ?>" />
         </div>
 
-        <a class="profil_option pointer" href="<?= home_url("/?vault=") ?>">
+        <a class="profil_option pointer" href="<?= home_url("/?vault=user-profil") ?>">
             <div>
                 <span>Mon Compte</span>
             </div>
@@ -31,11 +31,21 @@
 
         <!-- LE BOUTON DOIT APPARAITRE POUR L'ADMIN UNIQUEMENT -->
 
-        <a class="profil_option pointer" href="<?= home_url("/?vault=") ?>">
-            <div>
-                <span>Gérer les utilisateurs</span>
-            </div>
-        </a>
+        <?php
+
+        if (vault_is_admin()) {
+
+            ?>
+            <a class="profil_option pointer" href="<?= home_url("/?vault=user-management") ?>">
+                <div>
+                    <span>Gérer les utilisateurs</span>
+                </div>
+            </a>
+            <?php
+
+        }
+
+        ?>
 
         <a class="profil_option pointer" href="<?= home_url('/?vault=logout') ?>">
             <div>

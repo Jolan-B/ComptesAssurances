@@ -154,10 +154,10 @@ function vault_activate()
 
   $sql = "INSERT INTO `Propose` (`assurance_id`,`category_id`) VALUES
   (1,3),
-  (2,1),
+  (2,5),
   (3,2),
   (4,1),
-  (5,2);";
+  (5,4);";
 
   $db->exec($sql);
 
@@ -186,71 +186,125 @@ function vault_router()
 
     case 'login':
       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        require_once VAULT_PATH . 'backend/controllers/LoginCtrl.php';
+        require VAULT_PATH . 'backend/controllers/LoginCtrl.php';
       } else {
-        require_once VAULT_PATH . 'frontend/views/login/login.html.php';
+        require VAULT_PATH . 'frontend/views/login/login.html.php';
       }
       exit;
 
     case 'logout':
-      require_once VAULT_PATH . 'backend/controllers/LogoutCtrl.php';
+      require VAULT_PATH . 'backend/controllers/LogoutCtrl.php';
       exit;
 
     case 'forgot-password':
-      require_once VAULT_PATH . 'frontend/views/login/forgot-password.html.php';
+      require VAULT_PATH . 'frontend/views/login/forgot-password.html.php';
       exit;
 
     case 'forgot-password-send':
-      require_once VAULT_PATH . 'backend/controllers/ForgotPasswordCtrl.php';
+      require VAULT_PATH . 'backend/controllers/ForgotPasswordCtrl.php';
       exit;
 
     case 'reset-password':
-      require_once VAULT_PATH . 'frontend/views/login/reset-password.html.php';
+      require VAULT_PATH . 'frontend/views/login/reset-password.html.php';
       exit;
 
     case 'login-after-reset-password':
-      require_once VAULT_PATH . 'backend/controllers/ResetPasswordCtrl.php';
+      require VAULT_PATH . 'backend/controllers/ResetPasswordCtrl.php';
       exit;
 
     // ASSURANCE
 
     case 'dashboard':
       vault_check_auth();
-      require_once VAULT_PATH . 'backend/controllers/DashboardCtrl.php';
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        require VAULT_PATH . 'backend/controllers/FormCtrl.php';
+      } else {
+        require VAULT_PATH . 'backend/controllers/DashboardCtrl.php';
+      }
+      exit;
+
+    case 'reset-filter':
+      vault_check_auth();
+      vault_reset_filter_assurance();
+      wp_redirect(home_url('/?vault=dashboard'));
       exit;
 
     case 'change-favorite':
       vault_check_auth();
       vault_change_favorite_assurance($_POST['id_assurance']);
-      require_once VAULT_PATH . 'frontend/views/assurance/filter-assurance.html.php';
+      wp_redirect(home_url('/?vault=dashboard'));
+      exit;
+
+    case 'add-assurance':
+      vault_check_auth();
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        require VAULT_PATH . 'backend/controllers/FormCtrl.php';
+      } else {
+        require VAULT_PATH . 'frontend/views/assurance/add-assurance.html.php';
+      }
       exit;
 
     case 'edit-assurance':
       vault_check_auth();
       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        require_once VAULT_PATH . 'backend/controllers/FormCtrl.php';
+        require VAULT_PATH . 'backend/controllers/FormCtrl.php';
       } else {
         $id = intval($_GET['id'] ?? 0);
-        require_once VAULT_PATH . 'frontend/views/assurance/edit-assurance.html.php';
+        require VAULT_PATH . 'frontend/views/assurance/edit-assurance.html.php';
       }
       exit;
 
+    case 'delete-assurance':
+      require VAULT_PATH . 'backend/controllers/DeleteCtrl.php';
+      exit;
+
+    // LINK
+
+    case 'add-link':
+      vault_check_auth();
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        echo $_POST['name_link'];
+
+        require VAULT_PATH . 'backend/controllers/FormCtrl.php';
+      } else {
+        require VAULT_PATH . 'frontend/views/link/add-link.html.php';
+      }
+      exit;
+
+    case 'edit-link':
+      vault_check_auth();
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        require VAULT_PATH . 'backend/controllers/FormCtrl.php';
+      } else {
+        $id = intval($_GET['id'] ?? 0);
+        require VAULT_PATH . 'frontend/views/link/edit-link.html.php';
+      }
+      exit;
+
+    case 'delete-link':
+      vault_check_auth();
+      require VAULT_PATH . 'backend/controllers/DeleteCtrl.php';
+      exit;
 
     // CATEGORY
 
     case 'category-management':
       vault_check_auth(); // vérifier la session avant
-      require_once VAULT_PATH . 'frontend/views/category/show-category.html.php';
+      require VAULT_PATH . 'frontend/views/category/show-category.html.php';
       exit;
 
     // TYPE CATEGORY
 
     case 'type-category-management':
       vault_check_auth(); // vérifier la session avant
-      require_once VAULT_PATH . 'frontend/views/type_category/show-type-category.html.php';
+      require VAULT_PATH . 'frontend/views/type_category/show-type-category.html.php';
       exit;
 
     // USER
+
+    case 'user-profil':
+      vault_check_auth();
+      require VAULT_PATH . 'frontend/views/user/profil-user.html.php';
 
     case 'user-management':
       vault_check_auth(); // vérifier la session avant
@@ -258,7 +312,7 @@ function vault_router()
         wp_redirect(home_url('/?vault=dashboard'));
         exit;
       }
-      require_once VAULT_PATH . 'frontend/views/user/show-user.html.php';
+      require VAULT_PATH . 'frontend/views/user/show-user.html.php';
       exit;
 
     default:

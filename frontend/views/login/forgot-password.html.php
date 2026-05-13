@@ -18,9 +18,11 @@
     <div>
         <section class="bloc_login">
 
-
             <div>
-                <img src="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>">
+                <a class="arrow_back_login pointer" href="<?= home_url("/?vault=login") ?>">
+                    <img src="<?= VAULT_URL . 'frontend/assets/images/arrow_back_black.png' ?>" />
+                </a>
+                <img class="logo_sily_login" src="<?= VAULT_URL . 'frontend/assets/images/logo-sily.png' ?>">
                 <span>Mot de passe oublié</span>
             </div>
 

@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
 
+<?php
+$assurance = vault_get_assurance($id);
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Comptes</title>
+    <title>Modifier
+        <?= $assurance["name"] ?>
+    </title>
 
     <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/style.css' ?>">
     <link rel="stylesheet" href="<?= VAULT_URL . 'frontend/assets/css/assurance.css' ?>">
@@ -18,8 +24,6 @@
 <body>
 
     <?php
-    $assurance = vault_get_assurance($id);
-
     $txt_add_button = "Enregistrer";
     $path = 'dashboard';
     $title = "Modifier " . $assurance["name"];
@@ -27,96 +31,104 @@
     include_once VAULT_PATH . 'frontend/components/add-edit-bar.html.php';
     ?>
 
-    <form class="form_edit_assurance" id="<?= $form ?>" action="<?= home_url('/?vault=edit-assurance') ?>"
+    <form class="form_edit_add_assurance" id="<?= $form ?>" action="<?= home_url('/?vault=edit-assurance') ?>"
         method="POST">
         <input type="hidden" name="action" value="edit-assurance">
+        <input type="hidden" name="id" value="<?= $assurance['id'] ?>">
 
-        <section class="edit_assurance_data">
-            <section class="left_edit">
+        <section class="edit_add_assurance_data">
+            <section class="left_edit_add">
 
-                <div class="edit_logo">
+                <div class="edit_add_logo">
                     <label for="image">Logo</label>
                     <div>
-                        <input type="image" id="image" name="image"
-                            src="<?= $assurance['image'] ? VAULT_URL . "frontend/assets/images/logo/{$assurance['image']}" : VAULT_URL . "frontend/assets/images/logo/default.png" ?>">
-                        <img src="<?= VAULT_URL . 'frontend/assets/images/upload_black.png' ?>" />
+                        <img class="actual_logo"
+                            src="<?= $assurance['image'] ? VAULT_URL . "frontend/assets/images/logo/{$assurance['image']}" : VAULT_URL . "frontend/assets/images/logo/default.png" ?>" />
+                        <input type="hidden" name="image" value="<?= $assurance['image'] ?>">
+                        <img class="upload" src="<?= VAULT_URL . 'frontend/assets/images/upload_black.png' ?>" />
                     </div>
                 </div>
 
-                <div class="bloc_edit_assurance">
+                <div class="bloc_edit_add_assurance">
                     <label for="name">Nom Assurance</label>
-                    <input type="text" id="name" name="name" value="<?= $assurance['name'] ?>">
+                    <input type="text" id="name" name="name" value="<?= $assurance['name'] ?>" required>
                 </div>
 
-                <div class="bloc_edit_assurance">
+                <div class="bloc_edit_add_assurance">
                     <label for="url">URL</label>
-                    <input type="text" id="url" name="url" value="<?= $assurance['url'] ?>">
+                    <input type="text" id="url" name="url" value="<?= $assurance['url'] ?>" required>
                 </div>
 
-                <div class="bloc_edit_assurance">
+                <div class="bloc_edit_add_assurance">
                     <label for="username">Nom Utilisateur</label>
-                    <input type="text" id="username" name="username" value="<?= $assurance['username'] ?>">
+                    <input type="text" id="username" name="username" value="<?= $assurance['username'] ?>" required>
                 </div>
 
             </section>
 
-            <section class="right_edit">
+            <section class="right_edit_add">
 
-                <div class="bloc_edit_assurance">
+                <div class="bloc_edit_add_assurance">
                     <label for="pwd">Mot de passe</label>
-                    <input type="password" id="pwd" name="pwd" value="<?= $assurance['pwd'] ?>">
+                    <input type="password" id="pwd" name="pwd" value="<?= $assurance['pwd'] ?>" required>
                 </div>
 
-                <div class="bloc_edit_assurance">
+                <div class="bloc_edit_add_assurance">
                     <label for="cc">Code Courtage</label>
                     <input type="text" id="cc" name="cc" value="<?= $assurance['cc'] ?>">
                 </div>
 
-                <div class="bloc_edit_assurance">
+                <div class="bloc_edit_add_assurance">
                     <label for="commentary">Commentaire</label>
-                    <input type="text" id="commentary" name="commentary" value="<?= $assurance['commentary'] ?>">
+                    <textarea rows="10" id="commentary"
+                        name="commentary"><?= htmlspecialchars($assurance['commentary'] ?? '') ?></textarea>
                 </div>
 
             </section>
         </section>
 
-        <?php
-        $categories = vault_get_all_categories();
-        $types_category = vault_get_all_types_category();
+        <section class="edit_add_assurance_category_data">
 
-        // var_dump($categories);
-        // var_dump($types_category);
-        var_dump($assurance['categories']);
-        echo $assurance['categories']['category_id'];
-        ?>
-
-        <section class="edit_assurance_category_data">
             <?php
+            $categories = vault_get_all_categories();
+            $types_category = vault_get_all_types_category();
+
+            $assurance_category_ids = array_column($assurance['categories'], 'id');
+
+
             foreach ($types_category as $type) {
 
                 if ($types_category[0] != $type) {
                     echo '<br />';
                 }
 
-                // foreach ($assurance['categories'] as $propose) {
-                //     if ($propose['categories'] == $type) {
-                //         echo "proposé";
-                // }
-            
-                echo "<span class=\"edit_type_category\">{$type['name']}<span>";
-                echo '<br /><br />';
+                ?>
+                <div class="bloc_type_category">
+                    <span class="edit_add_type_category"><?= $type['name'] ?><span>
 
-                foreach ($categories as $category) {
+                            <?php
+                            foreach ($categories as $category) {
 
-                    if ($category['id_tc'] == $type['id']) {
-                        echo "<input type='checkbox' id='assurance_categories' name='categories' value={$category['id']}>";
-                        echo "<span class=\"edit_category\"> {$category['name_c']}<span>";
-                        echo '<br />';
-                    }
-                }
+                                if ($category['id_tc'] == $type['id']) {
+                                    ?>
+                                    <div class="bloc_category">
+
+                                        <input type='checkbox' id='assurance_categories' name='categories[]'
+                                            value="<?= $category['id'] ?>" <?= in_array($category['id'], $assurance_category_ids) ? 'checked' : '' ?> />
+
+                                        <span class="edit_add_category"><?= $category['name_c'] ?></span>
+                                    </div>
+
+                                    <?php
+
+                                }
+                            }
+                            ?>
+                </div>
+                <?php
             }
-
             ?>
+
         </section>
 
 

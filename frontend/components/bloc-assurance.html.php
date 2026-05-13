@@ -20,9 +20,11 @@
             <img class="pointer" src="<?= VAULT_URL . 'frontend/assets/images/edit_black.png' ?>" />
         </a>
 
-        <a href="<?= home_url("/?vault=delete-assurance?id={$assurance['id']}") ?>">
-            <img class="pointer" src="<?= VAULT_URL . 'frontend/assets/images/delete_red.png' ?>" />
-        </a>
+        <form method="POST" action="<?= home_url('/?vault=delete-assurance') ?>">
+            <input type="hidden" name="action" value="delete-assurance">
+            <input type="hidden" name="id_assurance" value="<?= $assurance['id'] ?>">
+            <input class="image_delete" type="image" src="<?= VAULT_URL . 'frontend/assets/images/delete_red.png' ?>" />
+        </form>
     </div>
 
 </section>

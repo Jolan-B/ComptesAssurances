@@ -36,11 +36,18 @@ a {
 /* Red Button */
 
 .red_button {
-    background-color: var(--color_grey_hover);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 0 5px;
     border-radius: 12px;
     font-weight: bold;
     border: none;
+    width: fit-content;
+
     color: white;
+    background-color: var(--color_grey_hover);
 }
 
 .red_button:hover {
@@ -185,7 +192,8 @@ a {
         transition: var(--transition_fast);
     }
 
-    .buttons_edit_delete a img {
+    .buttons_edit_delete img,
+    .buttons_edit_delete .image_delete {
         height: var(--edit_delete_button_width);
         transition: var(--transition_fast);
     }
@@ -247,20 +255,23 @@ a {
     width: 0;
 }
 
-.buttons_edit_delete a {
+.buttons_edit_delete a,
+.buttons_edit_delete form {
     display: block;
     line-height: 0;
     font-size: 0;
 }
 
-.buttons_edit_delete img {
+.buttons_edit_delete img,
+.buttons_edit_delete .image_delete {
     width: var(--edit_delete_button_width);
     height: 0;
     background-color: var(--color_grey);
     margin: 0;
 }
 
-.buttons_edit_delete img:hover {
+.buttons_edit_delete img:hover,
+.buttons_edit_delete .image_delete:hover {
     background-color: var(--color_grey_hover);
 }
 

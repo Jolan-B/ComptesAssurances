@@ -51,7 +51,7 @@ function vault_get_category($id)
 }
 
 // Ajouter une Catégorie
-function add_category($name, $id_type_category)
+function vault_add_category($name, $id_type_category)
 {
     $db = get_db();
 
@@ -64,7 +64,7 @@ function add_category($name, $id_type_category)
 }
 
 //Modifier une Catégorie
-function edit_category($id_category, $name, $id_type_category)
+function vault_edit_category($id_category, $name, $id_type_category)
 {
     $db = get_db();
     $sql = "UPDATE `Category`
@@ -78,7 +78,7 @@ function edit_category($id_category, $name, $id_type_category)
 }
 
 // Supprimer une Catégorie
-function delete_category($id)
+function vault_delete_category($id)
 {
     $db = get_db();
 

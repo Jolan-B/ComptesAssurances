@@ -1,6 +1,6 @@
-/* Edit Assurance */
+/* Edit / Add Assurance / Link */
 
-.form_edit_assurance {
+.form_edit_add_assurance {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -9,21 +9,19 @@
     padding: calc(30px + var(--nav_bar_height)) 0px;
 }
 
-.form_edit_assurance label {
+.form_edit_add_assurance label {
     font-weight: bold;
     font-size: var(--label_font_size);
 }
 
-.edit_assurance_data {
+.edit_add_assurance_data {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
 }
 
-.edit_assurance_category_data {}
-
-.left_edit,
-.right_edit {
+.left_edit_add,
+.right_edit_add {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -32,40 +30,75 @@
     width: 40vw;
 }
 
-.left_edit label,
-.right_edit label {
+.left_edit_add label,
+.right_edit_add label {
     margin-bottom: 10px;
 }
 
-.edit_logo {
+.edit_add_logo {
     display: flex;
     flex-direction: column;
     width: fit-content;
 
 }
 
-.edit_logo input {
+.edit_add_logo .actual_logo {
     width: var(--logo_assurance_width);
 }
 
-.edit_logo img {
+.edit_add_logo .upload {
     height: calc(var(--logo_assurance_width) / 3);
 }
 
-.edit_logo div {
+.edit_add_logo div {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-.bloc_edit_assurance {
+.bloc_edit_add_assurance {
     display: flex;
     flex-direction: column;
     width: 400px;
 }
 
-.bloc_edit_assurance label {
+.bloc_edit_add_assurance label {
     text-indent: 5px;
+}
+
+.edit_add_assurance_category_data {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    gap: 30px;
+    padding: 0 20px;
+}
+
+.bloc_type_category {
+    display: flex;
+    flex-direction: column;
+
+    padding: 20px 10px;
+    border-radius: 12px;
+
+    background-color: var(--color_grey);
+}
+
+.bloc_type_category>span {
+    font-size: var(--font_size_label);
+    font-weight: bold;
+}
+
+.bloc_category {
+    display: flex;
+    height: fit-content;
+    font-weight: normal;
+
+    gap: 5px;
+    padding-top: 10px;
+
 }
 
 /* Filter-Assurance */
@@ -135,9 +168,8 @@
     flex-direction: row;
     flex-wrap: wrap;
 
-    justify-content: space-between;
+    justify-content: flex-start;
 
-    padding: 10px;
-
-    gap: 10px;
+    padding: 10px 30px;
+    gap: 10px 60px;
 }

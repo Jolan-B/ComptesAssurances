@@ -47,7 +47,7 @@ switch ($action) {
         }
         break;
 
-    case 'add_link':
+    case 'add-link':
         if (vault_check_required_fields([$_POST["name_link"] ?? null, $_POST["url_link"] ?? null])) {
             $name = strip_tags($_POST["name_link"]);
             $url = strip_tags($_POST["url_link"]);
@@ -63,16 +63,17 @@ switch ($action) {
         }
         break;
 
-    case 'edit_link':
-        if (vault_check_required_fields([$_POST['id_link'] ?? null, $_POST['name_link'] ?? null, $_POST['url_link'] ?? null])) {
+    case 'edit-link':
 
-            $id = intval(strip_tags($_POST['id_link']));
-            $name = strip_tags($_POST['name_link']);
-            $url = strip_tags($_POST['url_link']);
-            $username = strip_tags($_POST['username_link'] ?? "");
-            $pwd = strip_tags($_POST['pwd_link'] ?? "");
-            $comm = strip_tags($_POST['commentary_link'] ?? "");
-            $img = strip_tags($_POST['image_link'] ?? "");
+        if (vault_check_required_fields([$_POST['id'] ?? null, $_POST['name'] ?? null, $_POST['url'] ?? null])) {
+
+            $id = intval(strip_tags($_POST['id']));
+            $name = strip_tags($_POST['name']);
+            $url = strip_tags($_POST['url']);
+            $username = strip_tags($_POST['username'] ?? "");
+            $pwd = strip_tags($_POST['pwd'] ?? "");
+            $comm = strip_tags($_POST['commentary'] ?? "");
+            $img = strip_tags($_POST['image'] ?? "");
 
             vault_edit_link($id, $name, $url, $username, $pwd, $comm, $img);
 
@@ -81,7 +82,7 @@ switch ($action) {
         }
         break;
 
-    case 'add_user':
+    case 'add-user':
         if (vault_check_required_fields([$_POST['name_user'] ?? null, $_POST['email_user'] ?? null, $_POST['pwd_user'] ?? null, $_POST['is_admin'] ?? null])) {
 
             $name = strip_tags($_POST['name_user']);
@@ -96,7 +97,7 @@ switch ($action) {
         }
         break;
 
-    case 'edit_user':
+    case 'edit-user':
         if (vault_check_required_fields([$_POST['name_user'] ?? null, $_POST['email_user'] ?? null, $_POST['pwd_user'] ?? null, $_POST['is_admin'] ?? null])) {
 
             $id = intval(strip_tags($_POST['id_user']));
@@ -112,7 +113,7 @@ switch ($action) {
         }
         break;
 
-    case 'save_filter':
+    case 'save-filter':
 
         $name = strip_tags($_POST['filter_name'] ?? "");
         $is_favorite = boolval(strip_tags($_POST['filter_is_favorite'] ?? false));

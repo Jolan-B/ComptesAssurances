@@ -23,14 +23,14 @@ function vault_get_all_users($by_name = true)
 function vault_get_user($id)
 {
     $db = get_db();
-    $sql = "SELECT `id_user` AS id ,`name_user` AS name,`email_user` AS email
+    $sql = "SELECT `id_user` AS id ,`name_user` AS name,`email_user` AS email, `password_user` AS pwd
     FROM `App_User`
     WHERE `id_user` = :id ";
     $req = $db->prepare($sql);
     $req->bindValue(":id", $id);
     $req->execute();
-    return $req->fetch();
 
+    return $req->fetch();
 }
 
 // Ajouter un utilisateur

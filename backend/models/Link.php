@@ -17,13 +17,17 @@ function vault_get_link($id_link)
 {
     $db = get_db();
 
-    $sql = "SELECT `id_link`,`name_link`,`url_link`,`username_link`,`password_link`,`image_link`, `commentary_link`
+    $sql = "SELECT `id_link` AS id,`name_link` AS name,`url_link` AS url,`username_link` AS username,`password_link` AS pwd,`image_link` AS image, `commentary_link` AS commentary
     FROM `Link`
     WHERE `id_link` = :id;";
     $req = $db->prepare($sql);
     $req->bindValue(":id", $id_link);
     $req->execute();
-    return $req->fetch();
+
+    $link = $req->fetch();
+    $link["pwd"] = openssl_decrypt($link['pwd'], 'AES-256-CBC', VAULT_AES_KEY, 0, VAULT_AES_IV);
+
+    return $link;
 }
 
 // Ajouter un Lien

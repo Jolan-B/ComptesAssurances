@@ -28,16 +28,17 @@
 
         <form action="<?= home_url('/?vault=dashboard') ?>" class="filter_assurance" method="POST">
 
-            <input type="hidden" name="action" value="save_filter">
+            <input type="hidden" name="action" value="save-filter">
 
             <div>
                 <label for="name">Nom de l'assurance</label>
-                <input type="text" id="name" name="name" placeholder="Entrez le nom">
+                <input type="text" id="name" name="filter_name" placeholder="Entrez le nom"
+                    value="<?= $_SESSION['filter_name'] ?>">
             </div>
 
             <div>
-                <input type="checkbox" id="favorite" name="favorite">
-                <label for="favorite">Favori</label>
+                <input type="checkbox" id="is_favorite" name="filter_is_favorite" <?= $_SESSION['filter_is_favorite'] ? "checked" : "" ?>>
+                <label for="is_favorite">Favori</label>
             </div>
 
             <label for="assurance_categories">Catégorie proposé</label>
@@ -45,26 +46,27 @@
             <div class="filter_assurance_categories">
 
                 <?php
-                $types_category = vault_get_all_types_category();
-                $categories = vault_get_all_categories();
-
                 foreach ($types_category as $type) {
 
                     if ($types_category[0] != $type) {
                         echo '<br/>';
                     }
+                    ?>
+                    <span class="type_category"><?= $type['name'] ?><span>
+                            <br /><br />
 
-                    echo "<span class=\"type_category\">{$type['name']}<span>";
-                    echo '<br/><br/>';
+                            <?php
+                            foreach ($categories as $category) {
 
-                    foreach ($categories as $category) {
-
-                        if ($category['id_tc'] == $type['id']) {
-                            echo "<input type='checkbox' id='assurance_categories' name='categories' value={$category['id']} >";
-                            echo "<span class=\"category\"> {$category['name_c']}<span>";
-                            echo '<br/>';
-                        }
-                    }
+                                if ($category['id_tc'] == $type['id']) {
+                                    ?>
+                                    <input type='checkbox' id='assurance_categories' name='filter_categories[]'
+                                        value="<?= $category['id'] ?>" <?= !empty($_SESSION['filter_categories']) && in_array($category['id'], $_SESSION['filter_categories']) ? "checked" : "" ?>>
+                                    <span class="category"><?= $category['name_c'] ?></span>
+                                    <br />
+                                    <?php
+                                }
+                            }
                 }
                 ?>
 
@@ -73,7 +75,7 @@
             <div class="buttons_filter_assurances">
                 <?php
                 $txt_red_button = "Réinitialiser";
-                $type_red_button = "submit";
+                $path_red_button = "reset-filter";
                 include VAULT_PATH . 'frontend/components/red-button.html.php';
                 ?>
 
@@ -97,22 +99,34 @@
                 <?php
                 $txt_add_button = "Ajouter un Lien";
                 $type_add_button = "button";
+                $type_add_button = "submit";
+                $path_add_button = "add-link";
                 include VAULT_PATH . 'frontend/components/add-button.html.php';
                 ?>
             </div>
 
-
-            <?php
-            include_once VAULT_PATH . 'backend/models/Link.php';
-            $links = vault_get_all_links();
-
-            if ($links == null) {
-                ?>
-                <span>Pas de liens pour le moment</span>
+            <div class="list_image">
                 <?php
-            } else {
-            }
-            ?>
+                include_once VAULT_PATH . 'backend/models/Link.php';
+
+                if ($links == null) {
+                    ?>
+                    <span>Pas de lien pour le moment</span>
+                    <?php
+                } else {
+                    foreach ($links as $link) {
+
+                        // si il n'y a pas d'image de base
+                        if ($link['image_link'] == null || $link['image_link'] == '') {
+                            $link['image_link'] = "default.png";
+                        }
+
+                        include VAULT_PATH . '/frontend/components/bloc-link.html.php';
+                    }
+                }
+                ?>
+            </div>
+
             <!-- LISTE DES ASSURANCES -->
 
             <div class="list_assurance_title_button">
@@ -122,6 +136,8 @@
                 <?php
                 $txt_add_button = "Ajouter un Compte";
                 $type_add_button = "button";
+                $type_add_button = "submit";
+                $path_add_button = "add-assurance";
                 include VAULT_PATH . 'frontend/components/add-button.html.php';
                 ?>
             </div>
@@ -129,16 +145,20 @@
             <div class="list_image">
 
                 <?php
-                $assurances = vault_get_all_assurances();
+                if ($assurances == null) {
+                    ?>
+                    <span>Pas d'assurance</span>
+                    <?php
+                } else {
+                    foreach ($assurances as $assurance) {
 
-                foreach ($assurances as $assurance) {
+                        // si il n'y a pas d'image de base
+                        if ($assurance['image'] == null || $assurance['image'] == '') {
+                            $assurance['image'] = "default.png";
+                        }
 
-                    // si il n'y a pas d'image de base
-                    if ($assurance['image'] == null || $assurance['image'] == '') {
-                        $assurance['image'] = "default.png";
+                        include VAULT_PATH . '/frontend/components/bloc-assurance.html.php';
                     }
-
-                    include VAULT_PATH . '/frontend/components/bloc-assurance.html.php';
                 }
                 ?>
 
